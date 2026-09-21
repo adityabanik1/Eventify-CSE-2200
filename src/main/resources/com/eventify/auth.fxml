@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eventify.AuthController"
+      fx:id="root"
+      alignment="CENTER"
+      spacing="14"
+      prefWidth="520"
+      prefHeight="600"
+      styleClass="auth-root"
+      stylesheets="@style.css">
+
+    <Label text="Eventify" styleClass="brand"/>
+
+    <Label text="Plan. Coordinate. Celebrate."
+           styleClass="subtitle"/>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE"
+             maxWidth="420"
+             VBox.vgrow="ALWAYS">
+
+        <tabs>
+            <Tab text="Sign in">
+                <content>
+                    <VBox spacing="14" styleClass="form-panel">
+                        <Label text="Welcome back"
+                               styleClass="section-title"/>
+
+                        <Label text="Email"/>
+                        <TextField fx:id="loginEmail"
+                                   promptText="you@example.com"/>
+
+                        <Label text="Password"/>
+                        <PasswordField fx:id="loginPassword"
+                                       promptText="Your password"
+                                       onAction="#onLogin"/>
+
+                        <Button text="Sign in"
+                                onAction="#onLogin"
+                                maxWidth="Infinity"
+                                styleClass="primary"/>
+                    </VBox>
+                </content>
+            </Tab>
+
+            <Tab text="Create participant account">
+                <content>
+                    <VBox spacing="10" styleClass="form-panel">
+                        <Label text="Join Eventify"
+                               styleClass="section-title"/>
+
+                        <TextField fx:id="registerName"
+                                   promptText="Full name"/>
+
+                        <TextField fx:id="registerEmail"
+                                   promptText="Email address"/>
+
+                        <PasswordField fx:id="registerPassword"
+                                       promptText="Password: at least 8 characters"/>
+
+                        <PasswordField fx:id="confirmPassword"
+                                       promptText="Confirm password"
+                                       onAction="#onRegister"/>
+
+                        <Button text="Create account"
+                                onAction="#onRegister"
+                                maxWidth="Infinity"
+                                styleClass="primary"/>
+
+                        <Label text="New accounts are participant accounts."
+                               wrapText="true"
+                               styleClass="muted"/>
+                    </VBox>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
+
+    <Label fx:id="statusLabel"
+           text="Ready"
+           wrapText="true"
+           styleClass="muted"/>
+</VBox>

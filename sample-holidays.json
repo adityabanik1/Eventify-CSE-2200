@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2026-01-01",
+    "localName": "New Year's Day",
+    "name": "New Year's Day",
+    "countryCode": "US"
+  },
+  {
+    "date": "2026-07-04",
+    "localName": "Independence Day",
+    "name": "Independence Day",
+    "countryCode": "US"
+  },
+  {
+    "date": "2026-12-25",
+    "localName": "Christmas Day",
+    "name": "Christmas Day",
+    "countryCode": "US"
+  }
+]
