@@ -3,8 +3,10 @@ package com.eventify;
 import com.eventify.Models.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,15 +32,28 @@ public final class Forms {
         );
 
         GridPane grid = new GridPane();
-        grid.setHgap(12);
-        grid.setVgap(12);
+        grid.setHgap(14);
+        grid.setVgap(14);
         grid.setStyle("-fx-padding: 20;");
-        grid.setPrefWidth(480);
+        grid.setPrefWidth(540);
+
+        // Explicit column constraints prevent labels from collapsing into "..."
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setMinWidth(110);
+        col1.setPrefWidth(125);
+        col1.setHgrow(Priority.NEVER);
+
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHgrow(Priority.ALWAYS);
+
+        grid.getColumnConstraints().addAll(col1, col2);
 
         for (int i = 0; i < controls.length; i++) {
             Label label = new Label(labels[i]);
-            Control control = controls[i];
+            label.setMinWidth(Region.USE_PREF_SIZE); // Never truncate label text
+            label.setStyle("-fx-font-weight: bold;");
 
+            Control control = controls[i];
             control.setMaxWidth(Double.MAX_VALUE);
 
             grid.add(label, 0, i);
@@ -60,16 +75,19 @@ public final class Forms {
         TextField title = new TextField(
                 existing == null ? "" : existing.title()
         );
+        title.setPromptText("e.g. Campus Tech Fest");
 
         TextArea description = new TextArea(
                 existing == null ? "" : existing.description()
         );
+        description.setPromptText("Enter event description, agenda or notes...");
         description.setPrefRowCount(3);
         description.setWrapText(true);
 
         TextField venue = new TextField(
                 existing == null ? "" : existing.venue()
         );
+        venue.setPromptText("e.g. Main Auditorium / Room 401");
 
         DatePicker date = new DatePicker(
                 existing == null
@@ -81,7 +99,7 @@ public final class Forms {
         TextField time = new TextField(
                 existing == null ? "09:00" : existing.time()
         );
-        time.setPromptText("HH:mm");
+        time.setPromptText("HH:mm (e.g. 09:30 or 14:00)");
 
         Spinner<Integer> capacity = new Spinner<>(
                 1,
@@ -126,19 +144,22 @@ public final class Forms {
         TextField title = new TextField(
                 existing == null ? "" : existing.title()
         );
+        title.setPromptText("e.g. Keynote Presentation");
 
         TextField start = new TextField(
                 existing == null ? event.time() : existing.start()
         );
+        start.setPromptText("HH:mm (e.g. 09:30)");
 
         TextField end = new TextField(
                 existing == null ? "" : existing.end()
         );
-        end.setPromptText("HH:mm, later than start");
+        end.setPromptText("HH:mm (later than start, e.g. 11:00)");
 
         TextField speaker = new TextField(
                 existing == null ? "" : existing.speaker()
         );
+        speaker.setPromptText("e.g. Guest Speaker / Organizing Team");
 
         boolean accepted = show(
                 existing == null ? "Add schedule item" : "Edit schedule item",
@@ -174,6 +195,7 @@ public final class Forms {
         TextField title = new TextField(
                 existing == null ? "" : existing.title()
         );
+        title.setPromptText("e.g. Manage registration desk");
 
         ComboBox<Registration> assignee = new ComboBox<>(
                 FXCollections.observableArrayList(registrations)
