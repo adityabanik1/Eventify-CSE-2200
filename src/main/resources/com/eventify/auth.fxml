@@ -1,87 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.eventify.AuthController"
-      fx:id="root"
-      alignment="CENTER"
-      spacing="14"
-      prefWidth="520"
-      prefHeight="600"
-      styleClass="auth-root"
-      stylesheets="@style.css">
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eventify.AuthController"
+            fitToWidth="true"
+            fitToHeight="true"
+            stylesheets="@style.css">
 
-    <Label text="Eventify" styleClass="brand"/>
+    <BorderPane fx:id="root" styleClass="auth-root" minHeight="580">
 
-    <Label text="Plan. Coordinate. Celebrate."
-           styleClass="subtitle"/>
+        <!-- Top Right Admin Login -->
+        <top>
+            <HBox alignment="TOP_RIGHT" spacing="10">
+                <VBox spacing="8" alignment="TOP_RIGHT" styleClass="form-panel" style="-fx-padding: 12px; -fx-background-radius: 8px;">
+                    <Label text="Admin Sign In" styleClass="section-title" style="-fx-font-size: 13px; -fx-text-fill: #94a3b8;"/>
+                    <HBox spacing="8">
+                        <TextField fx:id="adminEmail" text="admin@eventify.com" promptText="Admin Email" prefWidth="140" style="-fx-font-size: 11px;"/>
+                        <PasswordField fx:id="adminPassword" text="Admin@12345" promptText="Password" prefWidth="120" style="-fx-font-size: 11px;" onAction="#onAdminLogin"/>
+                        <Button text="Go" onAction="#onAdminLogin" styleClass="primary" style="-fx-font-size: 11px; -fx-padding: 4px 10px;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </top>
 
-    <TabPane tabClosingPolicy="UNAVAILABLE"
-             maxWidth="420"
-             VBox.vgrow="ALWAYS">
+        <!-- Center Area -->
+        <center>
+            <VBox alignment="CENTER" spacing="18" maxWidth="440">
+                <ImageView fx:id="eventLogoView" fitHeight="85" fitWidth="180" preserveRatio="true" smooth="true"/>
+                <HBox alignment="CENTER" spacing="12">
+                    <Label text="Eventify" styleClass="brand"/>
+                    <Label fx:id="eventBadge" text="BitFest" styleClass="event-badge"/>
+                </HBox>
+                <Label fx:id="subtitleLabel" text="Selected Event: BitFest" styleClass="subtitle"/>
+                <Button text="← Change Event" onAction="#onBackToHome" style="-fx-background-color: transparent; -fx-text-fill: #4f46e5; -fx-cursor: hand; -fx-font-weight: bold;"/>
 
-        <tabs>
-            <Tab text="Sign in">
-                <content>
-                    <VBox spacing="14" styleClass="form-panel">
-                        <Label text="Welcome back"
-                               styleClass="section-title"/>
+                <!-- Participant Login / Signup -->
+                <VBox fx:id="participantBox" spacing="14" styleClass="form-panel" VBox.vgrow="ALWAYS" prefWidth="440">
+                    <Label text="Participant Portal" styleClass="section-title"/>
+                    <TabPane fx:id="participantTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                        <tabs>
+                            <!-- Participant Login Tab -->
+                            <Tab text="Participant Sign In">
+                                <content>
+                                    <VBox spacing="12" style="-fx-padding: 16px 0 0 0;">
+                                        <Label text="Email address"/>
+                                        <TextField fx:id="participantLoginEmail" promptText="e.g. alice@example.com"/>
 
-                        <Label text="Email"/>
-                        <TextField fx:id="loginEmail"
-                                   promptText="you@example.com"/>
+                                        <Label text="Password"/>
+                                        <PasswordField fx:id="participantLoginPassword" promptText="Your password" onAction="#onParticipantLogin"/>
 
-                        <Label text="Password"/>
-                        <PasswordField fx:id="loginPassword"
-                                       promptText="Your password"
-                                       onAction="#onLogin"/>
+                                        <Button text="Sign In as Participant" onAction="#onParticipantLogin" maxWidth="Infinity" styleClass="primary"/>
 
-                        <Button text="Sign in"
-                                onAction="#onLogin"
-                                maxWidth="Infinity"
-                                styleClass="primary"/>
-                    </VBox>
-                </content>
-            </Tab>
+                                        <Label text="Demo participants: alice@example.com, bob@example.com (Password: Password@123)" wrapText="true" style="-fx-font-size: 11px;" styleClass="muted"/>
+                                    </VBox>
+                                </content>
+                            </Tab>
 
-            <Tab text="Create participant account">
-                <content>
-                    <VBox spacing="10" styleClass="form-panel">
-                        <Label text="Join Eventify"
-                               styleClass="section-title"/>
+                            <!-- Participant Sign Up Tab -->
+                            <Tab fx:id="signUpTab" text="Participant Sign Up">
+                                <content>
+                                    <VBox spacing="10" style="-fx-padding: 16px 0 0 0;">
+                                        <TextField fx:id="registerName" promptText="Full name"/>
+                                        <TextField fx:id="registerEmail" promptText="Email address"/>
+                                        <PasswordField fx:id="registerPassword" promptText="Password: at least 8 characters"/>
+                                        <PasswordField fx:id="confirmPassword" promptText="Confirm password" onAction="#onRegister"/>
 
-                        <TextField fx:id="registerName"
-                                   promptText="Full name"/>
+                                        <Button text="Create Participant Account" onAction="#onRegister" maxWidth="Infinity" styleClass="primary"/>
 
-                        <TextField fx:id="registerEmail"
-                                   promptText="Email address"/>
+                                        <Label text="New accounts can browse, register, and complete tasks." wrapText="true" styleClass="muted"/>
+                                    </VBox>
+                                </content>
+                            </Tab>
+                        </tabs>
+                    </TabPane>
+                </VBox>
 
-                        <PasswordField fx:id="registerPassword"
-                                       promptText="Password: at least 8 characters"/>
-
-                        <PasswordField fx:id="confirmPassword"
-                                       promptText="Confirm password"
-                                       onAction="#onRegister"/>
-
-                        <Button text="Create account"
-                                onAction="#onRegister"
-                                maxWidth="Infinity"
-                                styleClass="primary"/>
-
-                        <Label text="New accounts are participant accounts."
-                               wrapText="true"
-                               styleClass="muted"/>
-                    </VBox>
-                </content>
-            </Tab>
-        </tabs>
-    </TabPane>
-
-    <Label fx:id="statusLabel"
-           text="Ready"
-           wrapText="true"
-           styleClass="muted"/>
-</VBox>
+                <Label fx:id="statusLabel" text="Ready" wrapText="true" styleClass="muted"/>
+            </VBox>
+        </center>
+    </BorderPane>
+</ScrollPane>

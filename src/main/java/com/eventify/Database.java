@@ -15,11 +15,22 @@ import java.util.Locale;
 
 public final class Database {
 
-    public static final Path FILE = Path.of(
+    public static Path FILE = Path.of(
             System.getProperty("user.home"),
             ".eventify",
             "eventify.db"
     );
+
+    private static String activeContext = "eventify";
+
+    public static void setDatabaseContext(String contextName) {
+        activeContext = contextName != null ? contextName : "eventify";
+        FILE = Path.of(
+                System.getProperty("user.home"),
+                ".eventify",
+                activeContext + ".db"
+        );
+    }
 
     private Database() {
     }
@@ -194,12 +205,12 @@ public final class Database {
                     ON tasks(event_id)
                     """);
 
-            boolean firstRun = count(
+            boolean adminMissing = count(
                     connection,
                     "SELECT COUNT(*) FROM users WHERE role = 'ADMIN'"
             ) == 0;
 
-            if (firstRun) {
+            if (adminMissing) {
                 connection.setAutoCommit(false);
                 try {
                     String adminPassword = System.getenv(
@@ -228,38 +239,35 @@ public final class Database {
                             Passwords.hash(adminPassword)
                     );
 
-                    update(
-                            connection,
-                            """
-                            INSERT INTO events
-                                (title, description, venue,
-                                 event_date, event_time, capacity)
-                            VALUES (?, ?, ?, ?, ?, ?)
-                            """,
-                            "Campus Tech Fest",
-                            "Technology talks, demonstrations and teamwork.",
-                            "Main Auditorium",
-                            LocalDate.now().plusDays(7).toString(),
-                            "09:00",
-                            100
-                    );
+                    connection.commit();
+                } catch (Exception e) {
+                    connection.rollback();
+                    throw e;
+                }
+            }
 
-                    update(
-                            connection,
-                            """
-                            INSERT INTO events
-                                (title, description, venue,
-                                 event_date, event_time, capacity)
-                            VALUES (?, ?, ?, ?, ?, ?)
-                            """,
-                            "Programming Challenge",
-                            "A friendly programming competition.",
-                            "Computer Lab",
-                            LocalDate.now().plusDays(14).toString(),
-                            "10:00",
-                            40
-                    );
+            // Verify if context-specific sub-events have been seeded
+            boolean needsSeeding = false;
+            if ("BitFest".equalsIgnoreCase(activeContext)) {
+                needsSeeding = count(connection, "SELECT COUNT(*) FROM events") < 8;
+            } else if ("Calibration".equalsIgnoreCase(activeContext)) {
+                needsSeeding = count(connection, "SELECT COUNT(*) FROM events WHERE title LIKE '%Micromouse%' OR title LIKE '%CAD Contest%'") == 0;
+            } else if ("Ignition".equalsIgnoreCase(activeContext)) {
+                needsSeeding = count(connection, "SELECT COUNT(*) FROM events WHERE title LIKE '%3 Minute Thesis%' OR title LIKE '%Mechanics Olympiad%'") == 0;
+            } else {
+                needsSeeding = count(connection, "SELECT COUNT(*) FROM events") == 0;
+            }
 
+            if (needsSeeding) {
+                connection.setAutoCommit(false);
+                try {
+                    // Clean cascade wipe of old sample data in this specific database
+                    update(connection, "DELETE FROM tasks");
+                    update(connection, "DELETE FROM schedule");
+                    update(connection, "DELETE FROM registrations");
+                    update(connection, "DELETE FROM events");
+
+                    seedContextEvents(connection, activeContext);
                     connection.commit();
                 } catch (Exception e) {
                     connection.rollback();
@@ -1153,6 +1161,319 @@ public final class Database {
                     pendingTasks,
                     upcoming
             );
+        }
+    }
+
+    private static SlotDraft slot(String title, String start, String end, String speaker) {
+        return new SlotDraft(title, start, end, speaker);
+    }
+
+    private static void insertEventWithSchedule(
+            Connection connection,
+            String title,
+            String description,
+            String venue,
+            LocalDate date,
+            String time,
+            int capacity,
+            List<SlotDraft> slots
+    ) throws SQLException {
+        update(
+                connection,
+                """
+                INSERT INTO events (title, description, venue, event_date, event_time, capacity)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                title, description, venue, date.toString(), time, capacity
+        );
+
+        int eventId = count(connection, "SELECT last_insert_rowid()");
+
+        if (slots != null) {
+            for (SlotDraft s : slots) {
+                update(
+                        connection,
+                        """
+                        INSERT INTO schedule (event_id, title, start_time, end_time, speaker)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                        eventId, s.title(), s.start(), s.end(), s.speaker()
+                );
+            }
+        }
+    }
+
+    private static void seedContextEvents(Connection connection, String context) throws Exception {
+        LocalDate baseDate = LocalDate.now().plusDays(10);
+
+        if ("BitFest".equalsIgnoreCase(context)) {
+            // 3rd KUET CSE National Festival — BitFest 2025
+            insertEventWithSchedule(connection, "Inter University Programming Contest (IUPC)",
+                    "3rd KUET CSE National Festival premier competitive programming marathon for top universities.",
+                    "CSE Computer Lab & Aud.", baseDate, "09:00", 60,
+                    List.of(
+                            slot("Reporting & Mock Contest", "09:00", "10:00", "Problemsetters Panel"),
+                            slot("Main IUPC Contest (5 Hours)", "10:30", "15:30", "Contest Director"),
+                            slot("Solution Discussion & Award Ceremony", "16:00", "17:30", "Chief Guest & HOD")
+                    ));
+
+            insertEventWithSchedule(connection, "Hackathon",
+                    "24-hour sprint developing impactful software prototypes solving national problems.",
+                    "Software Engineering Lab", baseDate.plusDays(1), "09:30", 50,
+                    List.of(
+                            slot("Problem Statement Reveal & Mentoring", "09:30", "10:30", "Industry Mentors"),
+                            slot("Prototype Development & Checkpoint", "11:00", "16:00", "Technical Committee"),
+                            slot("Final Demo & Pitch to Jury", "16:30", "18:00", "Startup Founders Panel")
+                    ));
+
+            insertEventWithSchedule(connection, "Datathon",
+                    "Machine learning and data science analytics sprint on complex real-world data.",
+                    "AI Research Lab", baseDate.plusDays(1), "10:00", 40,
+                    List.of(
+                            slot("Dataset Briefing & Evaluation Criteria", "10:00", "11:00", "Lead Data Scientist"),
+                            slot("Modeling & Prediction Sprint", "11:30", "15:30", "Kaggle Grandmaster"),
+                            slot("Insights Presentation & Defense", "16:00", "17:00", "Research Jury")
+                    ));
+
+            insertEventWithSchedule(connection, "Gaming Contest",
+                    "Tactical high-intensity esports competition.",
+                    "Student Center Arena", baseDate.plusDays(2), "10:00", 64,
+                    List.of(
+                            slot("Knockout Bracket Rounds", "10:00", "13:00", "Tournament Admins"),
+                            slot("Semifinals Clash", "14:00", "16:00", "Casters Desk"),
+                            slot("Grand Championship Finals", "16:30", "18:00", "Main Stage Host")
+                    ));
+
+            insertEventWithSchedule(connection, "Line Following Robot Competition",
+                    "Autonomous line tracking robotics challenge across intricate curves and obstacles.",
+                    "KUET Gymnasium", baseDate.plusDays(2), "09:30", 45,
+                    List.of(
+                            slot("Arena Calibration & Technical Inspection", "09:30", "10:30", "Technical Lead"),
+                            slot("Time Trials (Round 1)", "11:00", "13:30", "Arena Referees"),
+                            slot("Obstacle Course Finals", "14:30", "16:30", "Robotics Society")
+                    ));
+
+            insertEventWithSchedule(connection, "Soccer Bot",
+                    "Remote-controlled vehicular robotics football battle in custom mini arena.",
+                    "KUET Gymnasium Arena 2", baseDate.plusDays(2), "10:00", 40,
+                    List.of(
+                            slot("Group Stage League Matches", "10:00", "12:30", "Head Referee"),
+                            slot("Quarter & Semi-Final Knockouts", "13:30", "15:00", "Arena Marshals"),
+                            slot("Soccer Bot Championship Match", "15:30", "16:30", "Robotics Club President")
+                    ));
+
+            insertEventWithSchedule(connection, "Project Showcase",
+                    "Showcase of innovative software, embedded systems, and hardware projects.",
+                    "Central Exhibition Hall", baseDate.plusDays(3), "09:30", 80,
+                    List.of(
+                            slot("Public Exhibition & Demonstration", "09:30", "12:00", "Exhibitors"),
+                            slot("Expert Jury Evaluation Rounds", "12:30", "15:00", "Faculty Panel"),
+                            slot("Prize & Innovation Honors", "15:30", "16:30", "Dean of EEE")
+                    ));
+
+            insertEventWithSchedule(connection, "IT Business Case Competition",
+                    "Strategic business problem solving combining tech viability and market strategy.",
+                    "CSE Seminar Room", baseDate.plusDays(3), "09:00", 35,
+                    List.of(
+                            slot("Case Study Reveal & Team Huddle", "09:00", "10:00", "Case Author"),
+                            slot("Strategy Formulation & Deck Build", "10:30", "13:30", "Mentors"),
+                            slot("Boardroom Pitch to Judges", "14:00", "16:30", "Corporate Executives")
+                    ));
+
+        } else if ("Calibration".equalsIgnoreCase(context)) {
+            // Calibration 2.0 (Department of Mechatronics Engineering, KUET)
+            insertEventWithSchedule(connection, "CAD Contest",
+                    "3D modeling and mechanical design challenge. Department of Mechatronics Engineering. Prize: BDT 30K.",
+                    "CAD Design Studio", baseDate, "09:00", 50,
+                    List.of(
+                            slot("Briefing & Modeling Task Reveal", "09:00", "09:30", "Design Committee"),
+                            slot("Solid Modeling & Rendering", "09:30", "12:30", "CAD Supervisors"),
+                            slot("Model Evaluation & Defense", "13:30", "15:00", "Industry Jury")
+                    ));
+
+            insertEventWithSchedule(connection, "Soccer Bot",
+                    "Fast-paced competitive robotic soccer tournament. Prize: BDT 50K.",
+                    "Mechatronics Arena", baseDate, "09:30", 40,
+                    List.of(
+                            slot("Round of 16 & Group Matches", "09:30", "12:00", "Referee Committee"),
+                            slot("Knockout Elimination Rounds", "13:00", "15:00", "Arena Marshals"),
+                            slot("Championship Match & Awarding", "15:30", "16:30", "Faculty Advisor")
+                    ));
+
+            insertEventWithSchedule(connection, "Line Follower Robot (LFR)",
+                    "High-speed autonomous navigation over complex tracks. Prize: BDT 50K.",
+                    "Mechatronics Arena Track B", baseDate.plusDays(1), "10:00", 45,
+                    List.of(
+                            slot("Track Calibration & Testing", "10:00", "11:00", "Track In-Charge"),
+                            slot("Qualifying Speed Heats", "11:30", "13:30", "Judges Panel"),
+                            slot("Championship Fast Run", "14:30", "16:00", "Chief Judge")
+                    ));
+
+            insertEventWithSchedule(connection, "RC Speed Battle",
+                    "Off-road radio-controlled high speed vehicular racing. Prize: BDT 40K.",
+                    "KUET Central Field Track", baseDate.plusDays(1), "10:00", 35,
+                    List.of(
+                            slot("Vehicle Inspection & Time Trials", "10:00", "11:30", "Pit Crew Marshals"),
+                            slot("Circuit Knockout Battles", "12:30", "14:30", "Race Director"),
+                            slot("Podium Celebration", "15:00", "16:00", "Department Head")
+                    ));
+
+            insertEventWithSchedule(connection, "Micromouse Maze Solver",
+                    "Autonomous maze-exploring algorithmic pathfinding contest. Prize: BDT 30K.",
+                    "Robotics Lab", baseDate.plusDays(1), "09:30", 30,
+                    List.of(
+                            slot("Maze Exploration & Mapping Phase", "09:30", "11:30", "Algorithm Jury"),
+                            slot("Fastest-Path Timed Runs", "12:30", "14:30", "Lead Arbiter"),
+                            slot("Score Verification & Results", "15:00", "16:00", "Robotics Club")
+                    ));
+
+            insertEventWithSchedule(connection, "Ad-Making Contest",
+                    "Creative advertising and promotional video production. Prize: BDT 25K.",
+                    "Media Center Hall", baseDate.plusDays(2), "10:00", 40,
+                    List.of(
+                            slot("Commercial Screening Round", "10:00", "12:00", "Creative Director"),
+                            slot("Pitch Defense & Q&A", "13:00", "14:30", "Ad Agency Panel")
+                    ));
+
+            insertEventWithSchedule(connection, "Business Case Study",
+                    "Engineering commercialization and business model contest. Prize: BDT 60K.",
+                    "Conference Hall A", baseDate.plusDays(2), "09:30", 40,
+                    List.of(
+                            slot("Case Presentation Round 1", "09:30", "12:30", "Case Analysts"),
+                            slot("Final Presentation to Venture Panel", "13:30", "16:00", "Venture Capitalists")
+                    ));
+
+            insertEventWithSchedule(connection, "Robotics and IT Olympiad",
+                    "Theoretical knowledge and problem-solving competition. Prize: BDT 16K.",
+                    "Academic Block A Aud.", baseDate.plusDays(2), "10:00", 100,
+                    List.of(
+                            slot("Olympiad Written Exam", "10:00", "12:00", "Exam Controller"),
+                            slot("Answer Key Discussion", "14:00", "15:30", "Faculty Panel")
+                    ));
+
+            insertEventWithSchedule(connection, "Project Showcasing",
+                    "Exhibition of mechatronics, automation, and robotics innovations. Prize: BDT 32K.",
+                    "Exhibition Center", baseDate.plusDays(3), "09:00", 60,
+                    List.of(
+                            slot("Project Demonstrations", "09:00", "12:00", "Technical Evaluators"),
+                            slot("Jury Scoring & Interviews", "13:00", "15:00", "Academic Jury")
+                    ));
+
+            insertEventWithSchedule(connection, "Poster Presentation",
+                    "Research and technical poster display. Prize: BDT 18K.",
+                    "Gallery Hall", baseDate.plusDays(3), "10:00", 50,
+                    List.of(
+                            slot("Poster Display & Walkthrough", "10:00", "12:30", "Session Chairs"),
+                            slot("Oral Defense & Evaluations", "13:30", "14:30", "Research Council")
+                    ));
+
+        } else if ("Ignition".equalsIgnoreCase(context)) {
+            // Ignition 2026 (Department of Mechanical Engineering, KUET)
+            insertEventWithSchedule(connection, "Line Follower Robot (LFR)",
+                    "Precision robotics navigation competition. Prize: BDT 80K.",
+                    "Mechanical Expo Ground", baseDate, "09:30", 50,
+                    List.of(
+                            slot("Qualifying Rounds", "09:30", "12:00", "Technical Stewards"),
+                            slot("High-Speed Finals", "13:00", "15:30", "Head Referee")
+                    ));
+
+            insertEventWithSchedule(connection, "Soccer Bot",
+                    "Thrilling robotic football tournament. Prize: BDT 90K.",
+                    "Mechanical Expo Ground", baseDate, "10:00", 40,
+                    List.of(
+                            slot("Group Matches", "10:00", "12:30", "Referees"),
+                            slot("Knockout Finals & Trophy", "13:30", "15:30", "ME Club President")
+                    ));
+
+            insertEventWithSchedule(connection, "Business Case Study",
+                    "Engineering strategy and management case contest. Prize: BDT 100K.",
+                    "ME Seminar Room", baseDate.plusDays(1), "09:00", 40,
+                    List.of(
+                            slot("Case Preparation Phase", "09:00", "12:00", "Case Facilitator"),
+                            slot("Executive Board Presentations", "13:00", "16:00", "Corporate Panel")
+                    ));
+
+            insertEventWithSchedule(connection, "Ad-Making",
+                    "Creative advertising showcasing engineering solutions. Prize: BDT 60K.",
+                    "Audio-Visual Hall", baseDate.plusDays(1), "10:00", 40,
+                    List.of(
+                            slot("Ad Screenings", "10:00", "12:00", "Creative Panel"),
+                            slot("Concept Defense", "13:00", "14:30", "Marketing Mentors")
+                    ));
+
+            insertEventWithSchedule(connection, "CAD Contest",
+                    "Mechanical component modeling and drafting. Prize: BDT 60K.",
+                    "Mechanical CAD Lab", baseDate.plusDays(1), "09:00", 50,
+                    List.of(
+                            slot("3D Part Modeling Sprint", "09:00", "12:00", "CAD Specialist"),
+                            slot("FEA & Structural Feasibility Check", "13:00", "14:30", "Professor of ME")
+                    ));
+
+            insertEventWithSchedule(connection, "Project Showcasing",
+                    "Innovative mechanical, energy, and automotive projects. Prize: BDT 50K.",
+                    "Central Workshop Hall", baseDate.plusDays(2), "09:30", 60,
+                    List.of(
+                            slot("Live Prototype Demonstration", "09:30", "12:30", "Workshop Supervisors"),
+                            slot("Jury Evaluation & Scoring", "13:30", "15:00", "Faculty Committee")
+                    ));
+
+            insertEventWithSchedule(connection, "Poster Presentation",
+                    "Mechanical engineering research and innovative concepts. Prize: BDT 35K.",
+                    "Workshop Gallery", baseDate.plusDays(2), "10:00", 50,
+                    List.of(
+                            slot("Poster Exhibition", "10:00", "12:00", "Session Judges"),
+                            slot("Q&A and Defense", "13:00", "14:00", "Review Board")
+                    ));
+
+            insertEventWithSchedule(connection, "3 Minute Thesis",
+                    "180-second rapid research presentation for engineering scholars. Prize: BDT 35K.",
+                    "Main Auditorium", baseDate.plusDays(2), "10:30", 40,
+                    List.of(
+                            slot("Rapid Presentations Round", "10:30", "12:30", "Session Chairs"),
+                            slot("Finalist Speeches & Awards", "13:30", "14:30", "Dean of ME")
+                    ));
+
+            insertEventWithSchedule(connection, "Mechanics Olympiad",
+                    "Advanced classical mechanics and thermodynamics challenge. Prize: BDT 15K.",
+                    "Lecture Theatre 1", baseDate.plusDays(3), "10:00", 80,
+                    List.of(
+                            slot("Written Exam Round", "10:00", "11:30", "Exam Invigilators"),
+                            slot("Solution Walkthrough", "12:30", "13:30", "Academic Team")
+                    ));
+
+            insertEventWithSchedule(connection, "Automobile Olympiad",
+                    "Automotive design, engines, and EV technology challenge. Prize: BDT 15K.",
+                    "Lecture Theatre 2", baseDate.plusDays(3), "11:00", 80,
+                    List.of(
+                            slot("Automobile Challenge Paper", "11:00", "12:30", "SAE Coordinators"),
+                            slot("Technical Discussion", "14:00", "15:00", "Automotive Engineers")
+                    ));
+
+            insertEventWithSchedule(connection, "Content Writing",
+                    "Technical and scientific writing competition. Prize: BDT 10K.",
+                    "ME Library Hall", baseDate.plusDays(3), "09:30", 50,
+                    List.of(
+                            slot("Article Writing Session", "09:30", "11:30", "Editorial Board"),
+                            slot("Evaluation & Feedback", "12:30", "14:00", "Senior Faculty")
+                    ));
+
+            insertEventWithSchedule(connection, "Gaming Contest (FIFA, Valorant)",
+                    "FIFA & Valorant competitive championship. Prize: BDT 50K.",
+                    "E-Sports Gaming Lounge", baseDate.plusDays(3), "10:00", 64,
+                    List.of(
+                            slot("Knockout Stage", "10:00", "13:00", "Gaming Admins"),
+                            slot("Championship Finals", "14:00", "16:30", "Shoutcasters")
+                    ));
+        } else {
+            // Default fallback
+            insertEventWithSchedule(connection, "Campus Tech Fest",
+                    "Technology talks, demonstrations and teamwork.",
+                    "Main Auditorium", baseDate, "09:00", 100,
+                    List.of(slot("Opening Ceremony", "09:00", "10:00", "Dean")));
+            insertEventWithSchedule(connection, "Programming Challenge",
+                    "A friendly programming competition.",
+                    "Computer Lab", baseDate.plusDays(7), "10:00", 40,
+                    List.of(slot("Contest Round", "10:00", "13:00", "Lead Judge")));
         }
     }
 }

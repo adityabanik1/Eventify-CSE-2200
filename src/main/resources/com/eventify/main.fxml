@@ -1,311 +1,339 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.eventify.MainController"
             fx:id="root"
-            prefWidth="1200"
-            prefHeight="780"
+            prefWidth="1260"
+            prefHeight="820"
             stylesheets="@style.css">
 
+    <!-- TOP HEADER -->
     <top>
-        <VBox spacing="12" styleClass="header">
+        <VBox spacing="0" styleClass="header">
             <HBox alignment="CENTER_LEFT" spacing="16">
-                <Label text="Eventify" styleClass="brand"/>
+                <!-- Festival Context Badge with Logo -->
+                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="event-badge">
+                    <ImageView fx:id="headerLogoView"
+                               fitHeight="24"
+                               fitWidth="24"
+                               preserveRatio="true"
+                               smooth="true"/>
+                    <Label fx:id="activeEventBadge" text="Ignition" style="-fx-font-weight: bold; -fx-text-fill: #a5b4fc;"/>
+                </HBox>
 
-                <Label text="Event Management &amp; Coordination"
-                       styleClass="subtitle"/>
+
+                <!-- Sub-event selection -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Active Sub-Event:" styleClass="muted" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="eventBox"
+                              prefWidth="320"
+                              minWidth="200"
+                              onAction="#onEventChanged"/>
+                    <Button text="Refresh"
+                            onAction="#onRefresh"/>
+                </HBox>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Label fx:id="userLabel"/>
+                <!-- User profile pill -->
+                <HBox alignment="CENTER" spacing="10" styleClass="user-pill">
+                    <Label text="👤" style="-fx-font-size: 15px;"/>
+                    <Label fx:id="userLabel" text="Organizer" style="-fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+                </HBox>
+
+                <!-- Navigation Quick Actions -->
+                <Button text="← Switch Event"
+                        onAction="#onSwitchEvent"
+                        style="-fx-background-color: rgba(99, 102, 241, 0.2); -fx-text-fill: #a5b4fc; -fx-border-color: rgba(99, 102, 241, 0.4);"/>
 
                 <Button text="Sign out"
                         onAction="#onLogout"/>
             </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label text="Selected event:" minWidth="-Infinity"/>
-
-                <ComboBox fx:id="eventBox"
-                          prefWidth="380"
-                          minWidth="240"
-                          onAction="#onEventChanged"/>
-
-                <Button text="Refresh"
-                        minWidth="-Infinity"
-                        onAction="#onRefresh"/>
-
-                <Label text="This selection controls registrations, schedule, tasks and ranking."
-                       wrapText="true"
-                       styleClass="muted"/>
-            </HBox>
         </VBox>
     </top>
 
+    <!-- LEFT SIDEBAR NAVIGATION -->
+    <left>
+        <VBox spacing="6" styleClass="sidebar">
+            <!-- Brand -->
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 14px 4px;">
+                <Label text="📅" style="-fx-font-size: 26px;"/>
+                <VBox>
+                    <Label text="Eventify" styleClass="sidebar-brand"/>
+                    <Label text="Plan • Organize • Celebrate" styleClass="sidebar-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <Label text="NAVIGATION" styleClass="sidebar-section-label"/>
+
+            <Button fx:id="navDashboard" text="🏠  Dashboard" onAction="#onNavDashboard" styleClass="nav-btn, active"/>
+            <Button fx:id="navEvents" text="🎯  Sub-Events" onAction="#onNavEvents" styleClass="nav-btn"/>
+            <Button fx:id="navRegistrations" text="👥  Registrations" onAction="#onNavRegistrations" styleClass="nav-btn"/>
+            <Button fx:id="navSchedule" text="⏱️  Schedule" onAction="#onNavSchedule" styleClass="nav-btn"/>
+            <Button fx:id="navTasks" text="📋  Team Tasks" onAction="#onNavTasks" styleClass="nav-btn"/>
+            <Button fx:id="navLeaderboard" text="🏆  Leaderboard" onAction="#onNavLeaderboard" styleClass="nav-btn"/>
+            <Button fx:id="navPlanning" text="🌐  Planning &amp; JSON" onAction="#onNavPlanning" styleClass="nav-btn"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Festival Sidebar Footer Card -->
+            <VBox spacing="8" styleClass="sidebar-card">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ImageView fx:id="sidebarFestivalLogo"
+                               fitHeight="26"
+                               fitWidth="26"
+                               preserveRatio="true"
+                               smooth="true"/>
+                    <Label fx:id="sidebarFestivalName" text="Eventify" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+                </HBox>
+                <Label fx:id="sidebarFestivalMotto" text="Great events bring people together to innovate and celebrate." style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" wrapText="true"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- CENTER AREA WITH TRANSPARENT WATERMARK LOGO -->
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
-            <tabs>
+        <StackPane style="-fx-background-color: #0b0f19;">
+            <!-- WATERMARK LAYER (Underneath everything, transparent festival logo) -->
+            <StackPane mouseTransparent="true" alignment="CENTER" style="-fx-padding: 30px;">
+                <ImageView fx:id="watermarkLogo"
+                           fitWidth="620"
+                           fitHeight="620"
+                           preserveRatio="true"
+                           smooth="true"
+                           opacity="0.25"
+                           mouseTransparent="true"/>
+            </StackPane>
 
-                <Tab text="Dashboard">
-                    <content>
-                        <VBox spacing="18" styleClass="page">
-                            <Label text="Dashboard"
-                                   styleClass="page-title"/>
+            <!-- FOREGROUND TAB CONTENT (Headless TabPane switched via Sidebar) -->
+            <TabPane fx:id="mainTabPane"
+                     styleClass="headless-tabs"
+                     tabClosingPolicy="UNAVAILABLE">
+                <tabs>
 
-                            <Label text="A central overview of your local Eventify workspace."
-                                   styleClass="muted"/>
+                    <!-- TAB 0: DASHBOARD -->
+                    <Tab text="Dashboard">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="20" styleClass="page">
+                                        <!-- HERO BANNER (Split layout with illuminated festival logo) -->
+                                        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="hero-banner">
+                                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                                <Label fx:id="heroWelcomeLabel" text="WELCOME TO EVENTIFY" styleClass="stat-title" style="-fx-text-fill: #a5b4fc;"/>
+                                                <Label fx:id="heroTitleLabel" text="Organize. Coordinate. Celebrate." styleClass="hero-title"/>
+                                                <Label fx:id="heroSubtitleLabel" text="From competitions to ceremonies, everything you need to coordinate your festival in one place."
+                                                       styleClass="hero-subtitle" wrapText="true"/>
+                                                <HBox spacing="10" style="-fx-padding: 8px 0 0 0;">
+                                                    <Button fx:id="heroActionButton" text="+ Create New Sub-Event" onAction="#onAddEvent" styleClass="primary"/>
+                                                </HBox>
+                                            </VBox>
 
-                            <HBox spacing="16">
-                                <VBox spacing="8"
-                                      styleClass="stat-card"
-                                      HBox.hgrow="ALWAYS">
-                                    <Label text="TOTAL EVENTS"/>
-                                    <Label fx:id="eventCountLabel"
-                                           text="0"
-                                           styleClass="stat-number"/>
-                                </VBox>
+                                            <!-- Glowing Hero Logo Card -->
+                                            <StackPane alignment="CENTER"
+                                                       prefHeight="130"
+                                                       prefWidth="130"
+                                                       styleClass="hero-logo-box">
+                                                <ImageView fx:id="heroFestivalLogo"
+                                                           fitHeight="115"
+                                                           fitWidth="115"
+                                                           preserveRatio="true"
+                                                           smooth="true"/>
+                                            </StackPane>
+                                        </HBox>
 
-                                <VBox spacing="8"
-                                      styleClass="stat-card"
-                                      HBox.hgrow="ALWAYS">
-                                    <Label text="UPCOMING EVENTS"/>
-                                    <Label fx:id="upcomingCountLabel"
-                                           text="0"
-                                           styleClass="stat-number"/>
-                                </VBox>
+                                        <!-- EVENT STATS ROW -->
+                                        <Label text="Event Overview &amp; Stats" styleClass="section-title"/>
+                                        <HBox spacing="16">
+                                            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                                <Label text="TOTAL EVENTS" styleClass="stat-title"/>
+                                                <Label fx:id="eventCountLabel" text="0" styleClass="stat-number" style="-fx-text-fill: #60a5fa;"/>
+                                            </VBox>
 
-                                <VBox spacing="8"
-                                      styleClass="stat-card"
-                                      HBox.hgrow="ALWAYS">
-                                    <Label text="TOTAL REGISTRATIONS"/>
-                                    <Label fx:id="registrationCountLabel"
-                                           text="0"
-                                           styleClass="stat-number"/>
-                                </VBox>
+                                            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                                <Label text="UPCOMING EVENTS" styleClass="stat-title"/>
+                                                <Label fx:id="upcomingCountLabel" text="0" styleClass="stat-number" style="-fx-text-fill: #818cf8;"/>
+                                            </VBox>
 
-                                <VBox spacing="8"
-                                      styleClass="stat-card"
-                                      HBox.hgrow="ALWAYS">
-                                    <Label text="PENDING TASKS"/>
-                                    <Label fx:id="pendingCountLabel"
-                                           text="0"
-                                           styleClass="stat-number"/>
-                                </VBox>
-                            </HBox>
+                                            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                                <Label text="TOTAL REGISTRATIONS" styleClass="stat-title"/>
+                                                <Label fx:id="registrationCountLabel" text="0" styleClass="stat-number" style="-fx-text-fill: #34d399;"/>
+                                            </VBox>
 
-                            <Label text="Selected event"
-                                   styleClass="section-title"/>
+                                            <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                                <Label text="PENDING TASKS" styleClass="stat-title"/>
+                                                <Label fx:id="pendingCountLabel" text="0" styleClass="stat-number" style="-fx-text-fill: #fbbf24;"/>
+                                            </VBox>
+                                        </HBox>
 
-                            <Label fx:id="selectedEventLabel"
-                                   text="No event selected"
-                                   wrapText="true"/>
+                                        <!-- SELECTED EVENT & UPCOMING SCHEDULE -->
+                                        <Label text="Active Sub-Event Focus" styleClass="section-title"/>
+                                        <VBox spacing="6" styleClass="stat-card">
+                                            <Label fx:id="selectedEventLabel" text="No event selected" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;" wrapText="true"/>
+                                            <Label text="Upcoming scheduled sessions for this festival:" styleClass="muted"/>
+                                            <TextArea fx:id="upcomingArea"
+                                                      editable="false"
+                                                      wrapText="true"
+                                                      minHeight="140"
+                                                      VBox.vgrow="ALWAYS"/>
+                                        </VBox>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                            <Label text="Upcoming scheduled activities"
-                                   styleClass="section-title"/>
+                    <!-- TAB 1: SUB-EVENTS -->
+                    <Tab text="Events">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Festival Sub-Events" styleClass="page-title"/>
+                                        <Label text="Select a competition or segment to inspect or manage." styleClass="muted" wrapText="true"/>
 
-                            <TextArea fx:id="upcomingArea"
-                                      editable="false"
-                                      wrapText="true"
-                                      VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
+                                        <HBox spacing="10">
+                                            <Button text="View details" onAction="#onViewEvent"/>
 
-                <Tab text="Events">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Events"
-                                   styleClass="page-title"/>
+                                            <HBox fx:id="eventAdminBar" spacing="10">
+                                                <Button text="+ Create event" onAction="#onAddEvent" styleClass="primary"/>
+                                                <Button text="Edit selected" onAction="#onEditEvent"/>
+                                                <Button text="Delete selected" onAction="#onDeleteEvent" styleClass="danger"/>
+                                            </HBox>
+                                        </HBox>
 
-                            <Label text="Select a row to edit or view details. Use the top selector for event-specific tabs."
-                                   wrapText="true"
-                                   styleClass="muted"/>
+                                        <TableView fx:id="eventsTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                            <HBox spacing="10">
-                                <Button text="View details"
-                                        onAction="#onViewEvent"/>
+                    <!-- TAB 2: REGISTRATIONS -->
+                    <Tab text="Registrations">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Participant Registrations" styleClass="page-title"/>
+                                        <Label fx:id="registrationHint" wrapText="true" styleClass="muted"/>
 
-                                <HBox fx:id="eventAdminBar" spacing="10">
-                                    <Button text="Create event"
-                                            onAction="#onAddEvent"
-                                            styleClass="primary"/>
+                                        <HBox spacing="10">
+                                            <Button fx:id="registerButton" text="Register for selected event" onAction="#onRegisterEvent" styleClass="primary"/>
+                                            <Button text="Cancel registration" onAction="#onCancelRegistration" styleClass="danger"/>
+                                            <Button fx:id="attendanceButton" text="Toggle attendance" onAction="#onToggleAttendance"/>
+                                        </HBox>
 
-                                    <Button text="Edit selected"
-                                            onAction="#onEditEvent"/>
+                                        <TableView fx:id="registrationsTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                                    <Button text="Delete selected"
-                                            onAction="#onDeleteEvent"
-                                            styleClass="danger"/>
-                                </HBox>
-                            </HBox>
+                    <!-- TAB 3: SCHEDULE -->
+                    <Tab text="Schedule">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Event Schedule &amp; Agenda" styleClass="page-title"/>
+                                        <Label text="Sessions take place on the event date in 24-hour HH:mm format." styleClass="muted" wrapText="true"/>
 
-                            <TableView fx:id="eventsTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
+                                        <HBox fx:id="scheduleAdminBar" spacing="10">
+                                            <Button text="+ Add session" onAction="#onAddSlot" styleClass="primary"/>
+                                            <Button text="Edit selected" onAction="#onEditSlot"/>
+                                            <Button text="Delete selected" onAction="#onDeleteSlot" styleClass="danger"/>
+                                        </HBox>
 
-                <Tab text="Registrations">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Participant registrations"
-                                   styleClass="page-title"/>
+                                        <TableView fx:id="scheduleTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                            <Label fx:id="registrationHint"
-                                   wrapText="true"
-                                   styleClass="muted"/>
+                    <!-- TAB 4: TASKS -->
+                    <Tab text="Tasks">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Team Tasks Coordination" styleClass="page-title"/>
+                                        <Label fx:id="taskHint" wrapText="true" styleClass="muted"/>
 
-                            <HBox spacing="10">
-                                <Button fx:id="registerButton"
-                                        text="Register for selected event"
-                                        onAction="#onRegisterEvent"
-                                        styleClass="primary"/>
+                                        <HBox spacing="10">
+                                            <HBox fx:id="taskAdminBar" spacing="10">
+                                                <Button text="+ Assign task" onAction="#onAddJob" styleClass="primary"/>
+                                                <Button text="Edit selected" onAction="#onEditJob"/>
+                                                <Button text="Delete selected" onAction="#onDeleteJob" styleClass="danger"/>
+                                            </HBox>
 
-                                <Button text="Cancel registration"
-                                        onAction="#onCancelRegistration"
-                                        styleClass="danger"/>
+                                            <Button text="Complete / reopen selected" onAction="#onToggleJob"/>
+                                        </HBox>
 
-                                <Button fx:id="attendanceButton"
-                                        text="Toggle attendance"
-                                        onAction="#onToggleAttendance"/>
-                            </HBox>
+                                        <TableView fx:id="tasksTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                            <TableView fx:id="registrationsTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
+                    <!-- TAB 5: LEADERBOARD -->
+                    <Tab text="Leaderboard">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Event Leaderboard" styleClass="page-title"/>
+                                        <Label text="Score = 10 attendance points + completed task points. Equal scores share a rank." styleClass="muted" wrapText="true"/>
 
-                <Tab text="Schedule">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Event schedule"
-                                   styleClass="page-title"/>
+                                        <TableView fx:id="leaderboardTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                            <Label text="Sessions take place on the event date. Times use 24-hour HH:mm format."
-                                   wrapText="true"
-                                   styleClass="muted"/>
+                    <!-- TAB 6: PLANNING & JSON -->
+                    <Tab text="Planning &amp; JSON">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <Label text="Holiday Planning &amp; JSON Tools" styleClass="page-title"/>
+                                        <Label text="Check public holidays before choosing an event date. API provider: Nager.Date." styleClass="muted" wrapText="true"/>
 
-                            <HBox fx:id="scheduleAdminBar" spacing="10">
-                                <Button text="Add session"
-                                        onAction="#onAddSlot"
-                                        styleClass="primary"/>
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Label text="Country:"/>
+                                            <TextField fx:id="countryField" text="US" prefWidth="70"/>
 
-                                <Button text="Edit selected"
-                                        onAction="#onEditSlot"/>
+                                            <Label text="Year:"/>
+                                            <TextField fx:id="yearField" prefWidth="90"/>
 
-                                <Button text="Delete selected"
-                                        onAction="#onDeleteSlot"
-                                        styleClass="danger"/>
-                            </HBox>
+                                            <Button text="Fetch holidays" onAction="#onFetchHolidays" styleClass="primary"/>
+                                            <Button text="Load holiday JSON" onAction="#onLoadHolidays"/>
+                                            <Button text="Export events JSON" onAction="#onExportEvents"/>
+                                        </HBox>
 
-                            <TableView fx:id="scheduleTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
+                                        <TableView fx:id="holidaysTable" minHeight="300" VBox.vgrow="ALWAYS"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
 
-                <Tab text="Tasks">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Task coordination"
-                                   styleClass="page-title"/>
-
-                            <Label fx:id="taskHint"
-                                   wrapText="true"
-                                   styleClass="muted"/>
-
-                            <HBox spacing="10">
-                                <HBox fx:id="taskAdminBar" spacing="10">
-                                    <Button text="Assign task"
-                                            onAction="#onAddJob"
-                                            styleClass="primary"/>
-
-                                    <Button text="Edit selected"
-                                            onAction="#onEditJob"/>
-
-                                    <Button text="Delete selected"
-                                            onAction="#onDeleteJob"
-                                            styleClass="danger"/>
-                                </HBox>
-
-                                <Button text="Complete / reopen selected"
-                                        onAction="#onToggleJob"/>
-                            </HBox>
-
-                            <TableView fx:id="tasksTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
-
-                <Tab text="Leaderboard">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Event leaderboard"
-                                   styleClass="page-title"/>
-
-                            <Label text="Score = 10 attendance points + completed task points. Equal scores share a rank."
-                                   wrapText="true"
-                                   styleClass="muted"/>
-
-                            <TableView fx:id="leaderboardTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
-
-                <Tab text="Planning &amp; JSON">
-                    <content>
-                        <VBox spacing="12" styleClass="page">
-                            <Label text="Holiday planning and JSON tools"
-                                   styleClass="page-title"/>
-
-                            <Label text="Check public holidays before choosing an event date. API provider: Nager.Date."
-                                   wrapText="true"
-                                   styleClass="muted"/>
-
-                            <HBox spacing="10" alignment="CENTER_LEFT">
-                                <Label text="Country:"/>
-
-                                <TextField fx:id="countryField"
-                                           text="US"
-                                           prefWidth="70"/>
-
-                                <Label text="Year:"/>
-
-                                <TextField fx:id="yearField"
-                                           prefWidth="90"/>
-
-                                <Button text="Fetch holidays"
-                                        onAction="#onFetchHolidays"
-                                        styleClass="primary"/>
-
-                                <Button text="Load holiday JSON"
-                                        onAction="#onLoadHolidays"/>
-
-                                <Button text="Export events JSON"
-                                        onAction="#onExportEvents"/>
-                            </HBox>
-
-                            <Label text="Country examples: US, GB, DE. Local holiday JSON uses the same array structure as the API response."
-                                   wrapText="true"
-                                   styleClass="muted"/>
-
-                            <TableView fx:id="holidaysTable"
-                                       VBox.vgrow="ALWAYS"/>
-                        </VBox>
-                    </content>
-                </Tab>
-
-            </tabs>
-        </TabPane>
+                </tabs>
+            </TabPane>
+        </StackPane>
     </center>
 
+    <!-- BOTTOM STATUS BAR -->
     <bottom>
         <Label fx:id="statusLabel"
                text="Ready"

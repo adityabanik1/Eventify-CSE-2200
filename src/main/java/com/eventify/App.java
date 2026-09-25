@@ -32,26 +32,78 @@ public class App extends Application {
                 return thread;
             });
 
+    private static String activeMainEvent = null;
+
+    public static void setActiveMainEvent(String eventName) {
+        activeMainEvent = eventName;
+        Database.setDatabaseContext(eventName);
+    }
+
+    public static String getActiveMainEvent() {
+        return activeMainEvent;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
         stage.setTitle("Eventify");
 
-        Label loading = new Label("Preparing Eventify...");
-        StackPane root = new StackPane(loading);
+        showHome();
+    }
 
-        stage.setScene(new Scene(root, 520, 420));
-        stage.show();
-
+    public static void selectMainEventAndLogin(String eventName, Parent currentRoot, Label statusLabel) {
+        setActiveMainEvent(eventName);
         run(
-                root,
-                loading,
+                currentRoot,
+                statusLabel,
                 () -> {
                     Database.initialize();
                     return null;
                 },
                 ignored -> showLogin()
         );
+    }
+
+    private static void switchScene(
+            Parent root,
+            double defaultWidth,
+            double defaultHeight,
+            double minWidth,
+            double minHeight,
+            String title
+    ) {
+        stage.setTitle(title);
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
+
+        Scene currentScene = stage.getScene();
+        if (currentScene == null) {
+            stage.setScene(new Scene(root, defaultWidth, defaultHeight));
+            stage.centerOnScreen();
+            stage.show();
+        } else {
+            boolean wasMaximized = stage.isMaximized();
+            currentScene.setRoot(root);
+            if (!wasMaximized) {
+                stage.setWidth(defaultWidth);
+                stage.setHeight(defaultHeight);
+                stage.centerOnScreen();
+            }
+        }
+    }
+
+    public static void showHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    App.class.getResource("home.fxml")
+            );
+
+            Parent root = loader.load();
+
+            switchScene(root, 900, 560, 680, 460, "Eventify — Select Event");
+        } catch (IOException e) {
+            showError(e);
+        }
     }
 
     public static void showLogin() {
@@ -62,11 +114,8 @@ public class App extends Application {
 
             Parent root = loader.load();
 
-            stage.setMinWidth(480);
-            stage.setMinHeight(570);
-            stage.setTitle("Eventify — Sign in");
-            stage.setScene(new Scene(root, 520, 600));
-            stage.centerOnScreen();
+            String event = activeMainEvent != null ? activeMainEvent : "General";
+            switchScene(root, 680, 680, 480, 420, "Eventify (" + event + ") — Portal Access");
         } catch (IOException e) {
             showError(e);
         }
@@ -82,11 +131,8 @@ public class App extends Application {
 
             MainController controller = loader.getController();
 
-            stage.setMinWidth(1000);
-            stage.setMinHeight(680);
-            stage.setTitle("Eventify — " + user.name());
-            stage.setScene(new Scene(root, 1200, 780));
-            stage.centerOnScreen();
+            String event = activeMainEvent != null ? activeMainEvent : "General";
+            switchScene(root, 1180, 750, 720, 480, "Eventify (" + event + ") — " + user.name());
 
             controller.setUser(user);
         } catch (IOException e) {

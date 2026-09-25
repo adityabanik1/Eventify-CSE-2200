@@ -1,92 +1,228 @@
+/* ==========================================================================
+   EVENTIFY — MODERN DARK THEME PALETTE (SaaS Dashboard Inspired)
+   ========================================================================== */
+
 .root {
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;
-    -fx-background-color: #f4f7fb;
-    -fx-text-fill: #17233b;
-    -fx-accent: #4f46e5;
-    -fx-focus-color: #818cf8;
-    -fx-faint-focus-color: rgba(129, 140, 248, 0.12);
+    -fx-background-color: #0b0f19;
+    -fx-text-fill: #e2e8f0;
+    -fx-accent: #6366f1;
+    -fx-focus-color: #6366f1;
+    -fx-faint-focus-color: rgba(99, 102, 241, 0.15);
 }
 
 .label {
-    -fx-text-fill: #17233b;
+    -fx-text-fill: #e2e8f0;
 }
 
 .brand {
-    -fx-font-size: 30px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
-    -fx-text-fill: #4f46e5;
+    -fx-text-fill: #6366f1;
 }
 
 .subtitle {
-    -fx-font-size: 13px;
-    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
 }
 
 .header {
-    -fx-padding: 20px 24px;
-    -fx-background-color: white;
-    -fx-border-color: transparent transparent #e2e8f0 transparent;
+    -fx-padding: 14px 22px;
+    -fx-background-color: #0f172a;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 1px;
 }
 
 .auth-root {
     -fx-padding: 30px;
+    -fx-background-color: #0b0f19;
 }
 
 .form-panel {
     -fx-padding: 24px;
-    -fx-background-color: white;
+    -fx-background-color: #111827;
+    -fx-background-radius: 14px;
+    -fx-border-color: #1f2937;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
 }
 
 .page {
-    -fx-padding: 22px;
+    -fx-padding: 24px;
+    -fx-background-color: transparent;
 }
 
 .page-title {
-    -fx-font-size: 25px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
+    -fx-text-fill: #f8fafc;
 }
 
 .section-title {
-    -fx-font-size: 17px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
+    -fx-text-fill: #f1f5f9;
 }
 
 .muted {
-    -fx-text-fill: #64748b;
+    -fx-text-fill: #94a3b8;
 }
 
+/* Hero Banner */
+.hero-banner {
+    -fx-padding: 24px 28px;
+    -fx-background-color: linear-gradient(to right, #091326 0%, #1e1b4b 60%, #083344 100%);
+    -fx-background-radius: 16px;
+    -fx-border-color: #3b82f6;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.25), 18, 0, 0, 4);
+}
+
+.hero-logo-box {
+    -fx-background-color: rgba(15, 23, 42, 0.85);
+    -fx-background-radius: 16px;
+    -fx-padding: 8px;
+    -fx-border-color: rgba(59, 130, 246, 0.5);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.35), 16, 0, 0, 0);
+}
+
+.hero-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.hero-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #c7d2fe;
+}
+
+/* Translucent Glass Stat Cards (Watermark shines through) */
 .stat-card {
-    -fx-padding: 20px;
-    -fx-background-color: white;
+    -fx-padding: 18px 20px;
+    -fx-background-color: rgba(17, 24, 39, 0.78);
     -fx-background-radius: 12px;
-    -fx-border-color: #e2e8f0;
+    -fx-border-color: rgba(255, 255, 255, 0.09);
     -fx-border-radius: 12px;
-    -fx-min-width: 190px;
+    -fx-border-width: 1px;
+    -fx-min-width: 180px;
+}
+
+.stat-card:hover {
+    -fx-border-color: rgba(255, 255, 255, 0.20);
+    -fx-background-color: rgba(24, 34, 53, 0.85);
+}
+
+.stat-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-letter-spacing: 0.5px;
 }
 
 .stat-number {
-    -fx-font-size: 32px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
-    -fx-text-fill: #4f46e5;
+    -fx-text-fill: #60a5fa;
 }
 
+/* Sidebar Navigation */
+.sidebar {
+    -fx-background-color: #0f172a;
+    -fx-border-color: transparent #1e293b transparent transparent;
+    -fx-border-width: 1px;
+    -fx-padding: 18px 12px;
+    -fx-min-width: 220px;
+    -fx-max-width: 240px;
+}
+
+.sidebar-brand {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #818cf8;
+    -fx-padding: 0 0 4px 8px;
+}
+
+.sidebar-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748b;
+    -fx-padding: 0 0 16px 8px;
+}
+
+.sidebar-section-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+    -fx-padding: 10px 8px 4px 8px;
+    -fx-letter-spacing: 1px;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10px 14px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #f8fafc;
+}
+
+.nav-btn.active {
+    -fx-background-color: #4f46e5;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.sidebar-card {
+    -fx-background-color: #111827;
+    -fx-background-radius: 10px;
+    -fx-border-color: #1f2937;
+    -fx-border-radius: 10px;
+    -fx-padding: 12px;
+}
+
+/* User pill in top header */
+.user-pill {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 999px;
+    -fx-border-color: #334155;
+    -fx-border-radius: 999px;
+    -fx-padding: 4px 14px 4px 8px;
+}
+
+/* Buttons */
 .button {
-    -fx-background-color: #e8edf5;
-    -fx-text-fill: #24324b;
-    -fx-background-radius: 7px;
-    -fx-padding: 9px 14px;
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: #334155;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 15px;
     -fx-cursor: hand;
     -fx-font-weight: bold;
+    -fx-font-size: 12px;
 }
 
 .button:hover {
-    -fx-background-color: #d9e2ef;
+    -fx-background-color: #334155;
+    -fx-text-fill: #ffffff;
 }
 
 .button.primary {
     -fx-background-color: #4f46e5;
-    -fx-text-fill: white;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: transparent;
 }
 
 .button.primary:hover {
@@ -94,112 +230,337 @@
 }
 
 .button.danger {
-    -fx-background-color: #fee2e2;
-    -fx-text-fill: #b91c1c;
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #f87171;
+    -fx-border-color: rgba(239, 68, 68, 0.3);
 }
 
 .button.danger:hover {
-    -fx-background-color: #fecaca;
+    -fx-background-color: #ef4444;
+    -fx-text-fill: #ffffff;
 }
 
+/* Text Inputs & Selectors */
 .text-field,
 .password-field,
 .combo-box,
 .date-picker {
-    -fx-background-color: white;
-    -fx-border-color: #cbd5e1;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #64748b;
+    -fx-border-color: #334155;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
 }
 
 .text-field,
 .password-field {
-    -fx-padding: 9px;
+    -fx-padding: 9px 12px;
+}
+
+.text-field:focused,
+.password-field:focused,
+.combo-box:focused {
+    -fx-border-color: #6366f1;
+    -fx-background-color: #192339;
+}
+
+.combo-box .cell,
+.combo-box-popup .list-cell {
+    -fx-text-fill: #f1f5f9;
+    -fx-background-color: #1e293b;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #334155;
 }
 
 .text-area {
-    -fx-border-color: #dbe3ee;
+    -fx-border-color: #334155;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: 'Consolas', 'Courier New', monospace;
+    -fx-font-size: 13px;
+    -fx-line-spacing: 4px;
 }
 
 .text-area .content {
-    -fx-background-color: white;
+    -fx-background-color: #111827;
     -fx-padding: 12px;
 }
 
+.text-area .text {
+    -fx-fill: #e2e8f0;
+}
+
+/* Headless TabPane (controlled by left sidebar) */
+.headless-tabs .tab-header-area {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #e9eef7;
+    -fx-background-color: #0f172a;
 }
 
 .tab-pane .tab {
     -fx-background-color: transparent;
-    -fx-padding: 10px 13px;
+    -fx-padding: 10px 14px;
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: white;
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 6px 6px 0 0;
 }
 
 .tab-pane .tab:selected .tab-label {
-    -fx-text-fill: #4f46e5;
+    -fx-text-fill: #818cf8;
     -fx-font-weight: bold;
 }
 
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #94a3b8;
+}
+
+/* TableView - Translucent Glass (Allows watermark to show through) */
 .table-view {
-    -fx-background-color: white;
-    -fx-border-color: #e2e8f0;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-background-color: rgba(17, 24, 39, 0.78);
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
 
 .table-view .column-header-background,
 .table-view .column-header,
 .table-view .filler {
-    -fx-background-color: #edf2fb;
+    -fx-background-color: #1e293b;
 }
 
 .table-view .column-header {
-    -fx-size: 42px;
-    -fx-border-color: transparent #e2e8f0 transparent transparent;
+    -fx-size: 38px;
+    -fx-border-color: transparent #334155 transparent transparent;
 }
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
     -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #94a3b8;
     -fx-padding: 0 10px;
+    -fx-font-size: 11px;
 }
 
 .table-row-cell {
-    -fx-cell-size: 40px;
-    -fx-background-color: white;
+    -fx-cell-size: 38px;
+    -fx-background-color: transparent;
+    -fx-text-fill: #e2e8f0;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: #f8faff;
+    -fx-background-color: rgba(255, 255, 255, 0.025);
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.15);
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #dfe6ff;
+    -fx-background-color: rgba(99, 102, 241, 0.35);
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: #17233b;
+    -fx-fill: #93c5fd;
 }
 
 .table-cell {
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 9px 10px;
+    -fx-padding: 8px 10px;
     -fx-border-color: transparent;
+    -fx-text-fill: #e2e8f0;
 }
 
+/* Status Bar */
 .status-bar {
-    -fx-padding: 11px 22px;
-    -fx-background-color: white;
-    -fx-border-color: #e2e8f0 transparent transparent transparent;
+    -fx-padding: 10px 20px;
+    -fx-background-color: #0f172a;
+    -fx-border-color: #1e293b transparent transparent transparent;
     -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
 }
 
 .dialog-pane {
-    -fx-background-color: #f8faff;
+    -fx-background-color: #111827;
+    -fx-text-fill: #f1f5f9;
 }
+
+.dialog-pane .label {
+    -fx-text-fill: #f1f5f9;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
+}
+
+.tab-pane,
+.tab-pane > .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+/* Event Badge */
+.event-badge {
+    -fx-background-color: rgba(99, 102, 241, 0.18);
+    -fx-text-fill: #a5b4fc;
+    -fx-font-weight: bold;
+    -fx-padding: 4px 12px;
+    -fx-background-radius: 999px;
+    -fx-border-color: rgba(99, 102, 241, 0.35);
+    -fx-border-radius: 999px;
+    -fx-font-size: 12px;
+}
+
+/* Role Card on Auth Screen */
+.role-card {
+    -fx-padding: 24px;
+    -fx-background-color: #111827;
+    -fx-background-radius: 14px;
+    -fx-border-color: #1f2937;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+
+.role-card:hover {
+    -fx-border-color: #6366f1;
+    -fx-background-color: #161f33;
+}
+
+/* ========================================================
+   FESTIVAL THEME 1: BITFEST 2025 (Cyber Indigo & Electric Cyan)
+   ======================================================== */
+.theme-bitfest .hero-banner {
+    -fx-background-color: linear-gradient(to right, #091326 0%, #1e1b4b 60%, #083344 100%);
+    -fx-border-color: #3b82f6;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.28), 20, 0, 0, 4);
+}
+.theme-bitfest .hero-logo-box {
+    -fx-background-color: rgba(15, 23, 42, 0.88);
+    -fx-border-color: rgba(59, 130, 246, 0.55);
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.35), 18, 0, 0, 0);
+}
+.theme-bitfest .primary {
+    -fx-background-color: linear-gradient(to right, #2563eb, #4f46e5);
+    -fx-border-color: #60a5fa;
+    -fx-text-fill: #ffffff;
+}
+.theme-bitfest .primary:hover {
+    -fx-background-color: linear-gradient(to right, #1d4ed8, #4338ca);
+}
+.theme-bitfest .event-badge {
+    -fx-background-color: rgba(37, 99, 235, 0.22);
+    -fx-text-fill: #93c5fd;
+    -fx-border-color: rgba(59, 130, 246, 0.45);
+}
+.theme-bitfest .nav-btn.active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #ffffff;
+}
+.theme-bitfest .sidebar-brand {
+    -fx-text-fill: #60a5fa;
+}
+
+/* ========================================================
+   FESTIVAL THEME 2: IGNITION 2026 (Fiery Orange & Molten Amber)
+   ======================================================== */
+.theme-ignition .hero-banner {
+    -fx-background-color: linear-gradient(to right, #3f1003 0%, #7c2d12 55%, #1c1917 100%);
+    -fx-border-color: #ea580c;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(234, 88, 12, 0.38), 24, 0, 0, 4);
+}
+.theme-ignition .hero-logo-box {
+    -fx-background-color: rgba(28, 25, 23, 0.88);
+    -fx-border-color: rgba(249, 115, 22, 0.65);
+    -fx-effect: dropshadow(gaussian, rgba(234, 88, 12, 0.45), 20, 0, 0, 0);
+}
+.theme-ignition .primary {
+    -fx-background-color: linear-gradient(to right, #ea580c, #c2410c);
+    -fx-border-color: #fb923c;
+    -fx-text-fill: #ffffff;
+}
+.theme-ignition .primary:hover {
+    -fx-background-color: linear-gradient(to right, #c2410c, #9a3412);
+}
+.theme-ignition .event-badge {
+    -fx-background-color: rgba(234, 88, 12, 0.25);
+    -fx-text-fill: #fdba74;
+    -fx-border-color: rgba(249, 115, 22, 0.55);
+}
+.theme-ignition .nav-btn.active {
+    -fx-background-color: #ea580c;
+    -fx-text-fill: #ffffff;
+}
+.theme-ignition .stat-number {
+    -fx-text-fill: #fb923c;
+}
+.theme-ignition .sidebar-brand {
+    -fx-text-fill: #fb923c;
+}
+.theme-ignition .table-row-cell:selected {
+    -fx-background-color: rgba(234, 88, 12, 0.35);
+}
+
+/* ========================================================
+   FESTIVAL THEME 3: CALIBRATION 2.0 (Mechatronics Emerald & Mint)
+   ======================================================== */
+.theme-calibration .hero-banner {
+    -fx-background-color: linear-gradient(to right, #022c22 0%, #064e3b 55%, #0f172a 100%);
+    -fx-border-color: #059669;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.38), 24, 0, 0, 4);
+}
+.theme-calibration .hero-logo-box {
+    -fx-background-color: rgba(15, 23, 42, 0.88);
+    -fx-border-color: rgba(16, 185, 129, 0.65);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.45), 20, 0, 0, 0);
+}
+.theme-calibration .primary {
+    -fx-background-color: linear-gradient(to right, #059669, #0d9488);
+    -fx-border-color: #34d399;
+    -fx-text-fill: #ffffff;
+}
+.theme-calibration .primary:hover {
+    -fx-background-color: linear-gradient(to right, #047857, #0f766e);
+}
+.theme-calibration .event-badge {
+    -fx-background-color: rgba(16, 185, 129, 0.25);
+    -fx-text-fill: #6ee7b7;
+    -fx-border-color: rgba(52, 211, 153, 0.55);
+}
+.theme-calibration .nav-btn.active {
+    -fx-background-color: #059669;
+    -fx-text-fill: #ffffff;
+}
+.theme-calibration .stat-number {
+    -fx-text-fill: #34d399;
+}
+.theme-calibration .sidebar-brand {
+    -fx-text-fill: #34d399;
+}
+.theme-calibration .table-row-cell:selected {
+    -fx-background-color: rgba(16, 185, 129, 0.35);
+}
+

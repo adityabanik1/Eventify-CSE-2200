@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.eventify.HomeController"
+           stylesheets="@style.css"
+           style="-fx-background-color: #0b0f19;">
+
+    <VBox fx:id="root"
+          alignment="CENTER"
+          spacing="24"
+          maxWidth="920"
+          styleClass="auth-root">
+
+        <Label text="Eventify" styleClass="brand"/>
+        <Label text="Select an Event to Continue" styleClass="page-title"/>
+        <Label text="Choose your festival portal below to view challenges, schedules, and leadership." styleClass="muted"/>
+
+        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 8px 0;">
+            <!-- BitFest Card -->
+            <VBox spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectBitFest"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(37, 99, 235, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(59, 130, 246, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/bitfest.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="BitFest 2025" styleClass="section-title"/>
+                <Label text="3rd KUET CSE National Tech Festival" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- Calibration Card -->
+            <VBox spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectCalibration"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(16, 185, 129, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(16, 185, 129, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/calibration.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="Calibration 2.0" styleClass="section-title"/>
+                <Label text="KUET Mechatronics National Tech Fest" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- Ignition Card -->
+            <VBox spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectIgnition"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(234, 88, 12, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(234, 88, 12, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/ignition.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="Ignition 2026" styleClass="section-title"/>
+                <Label text="KUET Mechanical National Engineering Fest" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+        </HBox>
+
+        <Label fx:id="statusLabel" text="Ready" wrapText="true" styleClass="muted"/>
+    </VBox>
+</StackPane>
