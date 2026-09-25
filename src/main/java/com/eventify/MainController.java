@@ -106,7 +106,8 @@ public class MainController {
     private void initialize() {
         yearField.setText(String.valueOf(LocalDate.now().getYear()));
 
-        column(eventsTable, "ID", 60, Event::id);
+        indexColumn(eventsTable);
+        column(eventsTable, "Event ID", 75, Event::id);
         column(eventsTable, "Title", 260, Event::title);
         column(eventsTable, "Date", 120, Event::date);
         column(eventsTable, "Time", 90, Event::time);
@@ -161,6 +162,24 @@ public class MainController {
         column(holidaysTable, "Local name", 320, Holiday::localName);
         column(holidaysTable, "English name", 360, Holiday::name);
         column(holidaysTable, "Country", 100, Holiday::countryCode);
+    }
+
+    private static <T> void indexColumn(TableView<T> table) {
+        TableColumn<T, Void> col = new TableColumn<>("#");
+        col.setPrefWidth(45);
+        col.setSortable(false);
+        col.setCellFactory(c -> new TableCell<>() {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null) {
+                    setText(null);
+                } else {
+                    setText(String.valueOf(getIndex() + 1));
+                }
+            }
+        });
+        table.getColumns().add(col);
     }
 
     private static <T> void column(
