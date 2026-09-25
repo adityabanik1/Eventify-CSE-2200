@@ -28,13 +28,15 @@
             </HBox>
 
             <HBox alignment="CENTER_LEFT" spacing="12">
-                <Label text="Selected event:"/>
+                <Label text="Selected event:" minWidth="-Infinity"/>
 
                 <ComboBox fx:id="eventBox"
-                          prefWidth="420"
+                          prefWidth="380"
+                          minWidth="240"
                           onAction="#onEventChanged"/>
 
                 <Button text="Refresh"
+                        minWidth="-Infinity"
                         onAction="#onRefresh"/>
 
                 <Label text="This selection controls registrations, schedule, tasks and ranking."

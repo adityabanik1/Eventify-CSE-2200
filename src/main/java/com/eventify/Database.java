@@ -266,6 +266,58 @@ public final class Database {
                     throw e;
                 }
             }
+
+            // Ensure template participant accounts exist for testing
+            connection.setAutoCommit(false);
+            try {
+                String hash = Passwords.hash("Password@123");
+
+                update(
+                        connection,
+                        "INSERT OR IGNORE INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'PARTICIPANT')",
+                        "Alice Walker", "alice@example.com", hash
+                );
+                update(
+                        connection,
+                        "INSERT OR IGNORE INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'PARTICIPANT')",
+                        "Bob Martin", "bob@example.com", hash
+                );
+                update(
+                        connection,
+                        "INSERT OR IGNORE INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'PARTICIPANT')",
+                        "Charlie Davis", "charlie@example.com", hash
+                );
+
+                List<Integer> eventIds = query(connection, "SELECT id FROM events", rs -> rs.getInt(1));
+                List<Integer> userIds = query(connection, "SELECT id FROM users WHERE role = 'PARTICIPANT' ORDER BY id", rs -> rs.getInt(1));
+
+                if (!eventIds.isEmpty() && userIds.size() >= 2) {
+                    int aliceId = userIds.get(0);
+                    int bobId = userIds.get(1);
+
+                    for (int eid : eventIds) {
+                        int regCount = count(connection, "SELECT COUNT(*) FROM registrations WHERE event_id = ?", eid);
+                        if (regCount == 0) {
+                            // Register Alice (attended = 1) and Bob (attended = 0)
+                            update(connection, "INSERT OR IGNORE INTO registrations (event_id, user_id, attended) VALUES (?, ?, 1)", eid, aliceId);
+                            update(connection, "INSERT OR IGNORE INTO registrations (event_id, user_id, attended) VALUES (?, ?, 0)", eid, bobId);
+
+                            // Template tasks for testing
+                            update(connection,
+                                    "INSERT INTO tasks (event_id, title, assignee_id, due_date, points, done) VALUES (?, ?, ?, ?, ?, 1)",
+                                    eid, "Prepare welcome kits", aliceId, LocalDate.now().plusDays(2).toString(), 20);
+                            update(connection,
+                                    "INSERT INTO tasks (event_id, title, assignee_id, due_date, points, done) VALUES (?, ?, ?, ?, ?, 0)",
+                                    eid, "Check projector setup", bobId, LocalDate.now().plusDays(3).toString(), 15);
+                        }
+                    }
+                }
+
+                connection.commit();
+            } catch (Exception e) {
+                connection.rollback();
+                throw e;
+            }
         }
     }
 
@@ -913,6 +965,27 @@ public final class Database {
             }
 
             int eventId = active == null ? -1 : active.id();
+
+            // If the selected event has no registrations, auto-seed Alice & Bob so admin can test immediately
+            if (eventId > 0) {
+                int regCount = count(connection, "SELECT COUNT(*) FROM registrations WHERE event_id = ?", eventId);
+                if (regCount == 0) {
+                    List<Integer> userIds = query(connection, "SELECT id FROM users WHERE role = 'PARTICIPANT' ORDER BY id", rs -> rs.getInt(1));
+                    if (userIds.size() >= 2) {
+                        int aliceId = userIds.get(0);
+                        int bobId = userIds.get(1);
+                        update(connection, "INSERT OR IGNORE INTO registrations (event_id, user_id, attended) VALUES (?, ?, 1)", eventId, aliceId);
+                        update(connection, "INSERT OR IGNORE INTO registrations (event_id, user_id, attended) VALUES (?, ?, 0)", eventId, bobId);
+
+                        update(connection,
+                                "INSERT INTO tasks (event_id, title, assignee_id, due_date, points, done) VALUES (?, ?, ?, ?, ?, 1)",
+                                eventId, "Prepare welcome kits", aliceId, LocalDate.now().plusDays(2).toString(), 20);
+                        update(connection,
+                                "INSERT INTO tasks (event_id, title, assignee_id, due_date, points, done) VALUES (?, ?, ?, ?, ?, 0)",
+                                eventId, "Check projector setup", bobId, LocalDate.now().plusDays(3).toString(), 15);
+                    }
+                }
+            }
 
             List<Registration> registrations = query(
                     connection,

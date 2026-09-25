@@ -42,7 +42,15 @@
 
 ## 👤 2. Participant Portal
 
-### 📝 How to Create an Account
+### 🧪 Pre-Seeded Test Participant Accounts
+For fast testing, these accounts are already created and registered for events:
+| Name | Email | Password | Status in Events |
+| :--- | :--- | :--- | :--- |
+| **Alice Walker** | `alice@example.com` | `Password@123` | Registered, Attended (10 pts), Completed Task (20 pts) |
+| **Bob Martin** | `bob@example.com` | `Password@123` | Registered, Not Attended (0 pts), Pending Task (15 pts) |
+| **Charlie Davis** | `charlie@example.com` | `Password@123` | Unregistered (Available for testing registration) |
+
+### 📝 How to Create a New Account
 1. On the authentication screen, click the **Create participant account** tab.
 2. Enter:
    * **Full Name** (e.g., `Ayesha Rahman`)
