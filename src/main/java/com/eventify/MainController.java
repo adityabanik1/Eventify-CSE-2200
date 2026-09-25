@@ -5,6 +5,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
@@ -93,6 +95,63 @@ public class MainController {
     @FXML
     private TextField yearField;
 
+    @FXML
+    private Label activeEventBadge;
+
+    @FXML
+    private ImageView watermarkLogo;
+
+    @FXML
+    private ImageView headerLogoView;
+
+    @FXML
+    private ImageView heroFestivalLogo;
+
+    @FXML
+    private ImageView sidebarFestivalLogo;
+
+    @FXML
+    private Label sidebarFestivalName;
+
+    @FXML
+    private Label sidebarFestivalMotto;
+
+    @FXML
+    private TabPane mainTabPane;
+
+    @FXML
+    private Button navDashboard;
+
+    @FXML
+    private Button navEvents;
+
+    @FXML
+    private Button navRegistrations;
+
+    @FXML
+    private Button navSchedule;
+
+    @FXML
+    private Button navTasks;
+
+    @FXML
+    private Button navLeaderboard;
+
+    @FXML
+    private Button navPlanning;
+
+    @FXML
+    private Label heroWelcomeLabel;
+
+    @FXML
+    private Label heroTitleLabel;
+
+    @FXML
+    private Label heroSubtitleLabel;
+
+    @FXML
+    private Button heroActionButton;
+
     private User user;
     private Snapshot snapshot;
     private boolean applyingSnapshot;
@@ -104,6 +163,86 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        String activeEvent = App.getActiveMainEvent();
+
+        // 1. Dynamic Festival Theming
+        String themeClass = switch (activeEvent != null ? activeEvent.toLowerCase() : "") {
+            case "bitfest" -> "theme-bitfest";
+            case "calibration" -> "theme-calibration";
+            case "ignition" -> "theme-ignition";
+            default -> "theme-default";
+        };
+        root.getStyleClass().removeAll("theme-bitfest", "theme-calibration", "theme-ignition", "theme-default");
+        root.getStyleClass().add(themeClass);
+
+        if (activeEventBadge != null) {
+            activeEventBadge.setText(activeEvent != null && !activeEvent.isBlank() ? activeEvent : "General");
+        }
+
+        // 2. Dynamic Festival Titles and Taglines
+        if (activeEvent != null) {
+            switch (activeEvent.toLowerCase()) {
+                case "bitfest" -> {
+                    if (heroWelcomeLabel != null) heroWelcomeLabel.setText("WELCOME TO BITFEST 2025");
+                    if (heroTitleLabel != null) heroTitleLabel.setText("Innovation. Code. Challenges.");
+                    if (heroSubtitleLabel != null) heroSubtitleLabel.setText("3rd KUET CSE National Tech Festival — IUPC, Hackathon, Robotics & more.");
+                    if (sidebarFestivalName != null) sidebarFestivalName.setText("BitFest 2025");
+                    if (sidebarFestivalMotto != null) sidebarFestivalMotto.setText("KUET CSE National Festival — Think. Build. Elevate.");
+                }
+                case "calibration" -> {
+                    if (heroWelcomeLabel != null) heroWelcomeLabel.setText("WELCOME TO CALIBRATION 2.0");
+                    if (heroTitleLabel != null) heroTitleLabel.setText("Calibrating The Future.");
+                    if (heroSubtitleLabel != null) heroSubtitleLabel.setText("KUET Mechatronics National Tech Fest — Robotics, CAD, IoT & Innovation.");
+                    if (sidebarFestivalName != null) sidebarFestivalName.setText("Calibration 2.0");
+                    if (sidebarFestivalMotto != null) sidebarFestivalMotto.setText("KUET Mechatronics — Precision & Engineering Excellence.");
+                }
+                case "ignition" -> {
+                    if (heroWelcomeLabel != null) heroWelcomeLabel.setText("WELCOME TO IGNITION 2026");
+                    if (heroTitleLabel != null) heroTitleLabel.setText("Ignite Your Potential.");
+                    if (heroSubtitleLabel != null) heroSubtitleLabel.setText("KUET Mechanical National Engineering Fest — Mechanical Olympiad, CAD & Showcase.");
+                    if (sidebarFestivalName != null) sidebarFestivalName.setText("Ignition 2026");
+                    if (sidebarFestivalMotto != null) sidebarFestivalMotto.setText("KUET Mechanical — Power, Passion & Innovation.");
+                }
+                default -> {
+                    if (heroWelcomeLabel != null) heroWelcomeLabel.setText("WELCOME TO EVENTIFY");
+                    if (heroTitleLabel != null) heroTitleLabel.setText("Organize. Coordinate. Celebrate.");
+                    if (heroSubtitleLabel != null) heroSubtitleLabel.setText("From competitions to ceremonies, everything you need to coordinate your festival.");
+                }
+            }
+        }
+
+        // 3. Load Authentic Transparent Festival Logos
+        if (activeEvent != null) {
+            String logoFile = switch (activeEvent.toLowerCase()) {
+                case "bitfest" -> "images/bitfest.png";
+                case "calibration" -> "images/calibration.png";
+                case "ignition" -> "images/ignition.png";
+                default -> null;
+            };
+            if (logoFile != null) {
+                var url = App.class.getResource(logoFile);
+                if (url != null) {
+                    Image watermarkImg = new Image(url.toExternalForm(), 620, 620, true, true);
+                    Image heroImg = new Image(url.toExternalForm(), 130, 130, true, true);
+                    Image sidebarImg = new Image(url.toExternalForm(), 32, 32, true, true);
+                    Image headerImg = new Image(url.toExternalForm(), 32, 32, true, true);
+
+                    if (watermarkLogo != null) {
+                        watermarkLogo.setImage(watermarkImg);
+                    }
+                    if (heroFestivalLogo != null) {
+                        heroFestivalLogo.setImage(heroImg);
+                    }
+                    if (sidebarFestivalLogo != null) {
+                        sidebarFestivalLogo.setImage(sidebarImg);
+                    }
+                    if (headerLogoView != null) {
+                        headerLogoView.setImage(headerImg);
+                    }
+                }
+            }
+        }
+
         yearField.setText(String.valueOf(LocalDate.now().getYear()));
 
         indexColumn(eventsTable);
@@ -231,7 +370,70 @@ public class MainController {
                             + "Select a task to complete or reopen it."
         );
 
+        if (heroActionButton != null) {
+            if (user.isAdmin()) {
+                heroActionButton.setText("+ Create New Sub-Event");
+                heroActionButton.setOnAction(e -> onAddEvent());
+            } else {
+                heroActionButton.setText("✨ Browse & Register for Events");
+                heroActionButton.setOnAction(e -> onNavEvents());
+            }
+        }
+
         refresh(null);
+    }
+
+    @FXML
+    private void onNavDashboard() {
+        selectNav(0, navDashboard);
+    }
+
+    @FXML
+    private void onNavEvents() {
+        selectNav(1, navEvents);
+    }
+
+    @FXML
+    private void onNavRegistrations() {
+        selectNav(2, navRegistrations);
+    }
+
+    @FXML
+    private void onNavSchedule() {
+        selectNav(3, navSchedule);
+    }
+
+    @FXML
+    private void onNavTasks() {
+        selectNav(4, navTasks);
+    }
+
+    @FXML
+    private void onNavLeaderboard() {
+        selectNav(5, navLeaderboard);
+    }
+
+    @FXML
+    private void onNavPlanning() {
+        selectNav(6, navPlanning);
+    }
+
+    private void selectNav(int index, Button activeBtn) {
+        if (mainTabPane != null) {
+            mainTabPane.getSelectionModel().select(index);
+        }
+        List<Button> buttons = List.of(
+                navDashboard, navEvents, navRegistrations,
+                navSchedule, navTasks, navLeaderboard, navPlanning
+        );
+        for (Button b : buttons) {
+            if (b != null) {
+                b.getStyleClass().remove("active");
+            }
+        }
+        if (activeBtn != null && !activeBtn.getStyleClass().contains("active")) {
+            activeBtn.getStyleClass().add("active");
+        }
     }
 
     private static void visible(Node node, boolean value) {
@@ -374,6 +576,11 @@ public class MainController {
     }
 
     @FXML
+    private void onSwitchEvent() {
+        App.showHome();
+    }
+
+    @FXML
     private void onLogout() {
         App.showLogin();
     }
@@ -442,7 +649,9 @@ public class MainController {
         Event event = requireEvent();
 
         if (event != null) {
-            change(() -> Database.register(user, event.id()));
+            if (Forms.showPaymentForm(event)) {
+                change(() -> Database.register(user, event.id()));
+            }
         }
     }
 

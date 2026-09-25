@@ -1,21 +1,54 @@
 package com.eventify;
 
+import com.eventify.Models.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class AuthController {
 
     @FXML
-    private VBox root;
+    private BorderPane root;
 
     @FXML
-    private TextField loginEmail;
+    private ImageView eventLogoView;
 
     @FXML
-    private PasswordField loginPassword;
+    private Label eventBadge;
+
+    @FXML
+    private Label subtitleLabel;
+
+    @FXML
+    private Label statusLabel;
+
+    @FXML
+    private VBox participantBox;
+
+    @FXML
+    private TextField adminEmail;
+
+    @FXML
+    private PasswordField adminPassword;
+
+    @FXML
+    private TabPane participantTabPane;
+
+    @FXML
+    private Tab signUpTab;
+
+    @FXML
+    private TextField participantLoginEmail;
+
+    @FXML
+    private PasswordField participantLoginPassword;
 
     @FXML
     private TextField registerName;
@@ -30,12 +63,73 @@ public class AuthController {
     private PasswordField confirmPassword;
 
     @FXML
-    private Label statusLabel;
+    public void initialize() {
+        String event = App.getActiveMainEvent();
+        if (event != null && !event.isBlank()) {
+            eventBadge.setText(event);
+            subtitleLabel.setText("Selected Event: " + event);
+
+            String themeClass = switch (event.toLowerCase()) {
+                case "bitfest" -> "theme-bitfest";
+                case "calibration" -> "theme-calibration";
+                case "ignition" -> "theme-ignition";
+                default -> "theme-default";
+            };
+            if (root != null) {
+                root.getStyleClass().removeAll("theme-bitfest", "theme-calibration", "theme-ignition", "theme-default");
+                root.getStyleClass().add(themeClass);
+            }
+
+            if (eventLogoView != null) {
+                String logoFile = switch (event.toLowerCase()) {
+                    case "bitfest" -> "images/bitfest.png";
+                    case "calibration" -> "images/calibration.png";
+                    case "ignition" -> "images/ignition.png";
+                    default -> null;
+                };
+                if (logoFile != null) {
+                    var url = App.class.getResource(logoFile);
+                    if (url != null) {
+                        eventLogoView.setImage(new Image(url.toExternalForm(), 200, 90, true, true));
+                    }
+                }
+            }
+        } else {
+            eventBadge.setText("General");
+            subtitleLabel.setText("Event Management & Planning");
+        }
+    }
 
     @FXML
-    private void onLogin() {
-        String email = loginEmail.getText();
-        String password = loginPassword.getText();
+    public void onBackToHome() {
+        App.showHome();
+    }
+
+    @FXML
+    private void onAdminLogin() {
+        String email = adminEmail.getText();
+        String password = adminPassword.getText();
+
+        App.run(
+                root,
+                statusLabel,
+                () -> {
+                    User user = Database.login(email, password);
+                    if (!user.isAdmin()) {
+                        throw new SecurityException(
+                                "This account is a participant account. Please sign in via the Participant Portal."
+                        );
+                    }
+                    return user;
+                },
+                App::showMain
+        );
+    }
+
+    @FXML
+    private void onParticipantLogin() {
+        String email = participantLoginEmail.getText();
+        String password = participantLoginPassword.getText();
 
         App.run(
                 root,
@@ -70,16 +164,20 @@ public class AuthController {
                     registerPassword.clear();
                     confirmPassword.clear();
 
-                    loginEmail.setText(email);
-                    loginPassword.clear();
+                    participantLoginEmail.setText(email);
+                    participantLoginPassword.clear();
+
+                    if (participantTabPane != null && !participantTabPane.getTabs().isEmpty()) {
+                        participantTabPane.getSelectionModel().select(0);
+                    }
 
                     statusLabel.setText(
                             "Account created. Open Sign in to continue."
                     );
 
                     Forms.info(
-                            "Participant account created successfully.\n"
-                                    + "Open the Sign in tab and log in."
+                            "Participant account created successfully!\n"
+                                    + "You can now log in with your email and password."
                     );
                 }
         );
