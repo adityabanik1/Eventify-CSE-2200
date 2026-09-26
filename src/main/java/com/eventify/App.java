@@ -23,7 +23,7 @@ public class App extends Application {
     private static Stage stage;
 
     private static final ExecutorService WORKER =
-            Executors.newSingleThreadExecutor(runnable -> {
+            Executors.newFixedThreadPool(4, runnable -> {
                 Thread thread = new Thread(
                         runnable,
                         "eventify-background-worker"
@@ -45,6 +45,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Regular.ttf"), 14);
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Bold.ttf"), 14);
         stage = primaryStage;
         stage.setTitle("Eventify");
 
@@ -162,7 +164,7 @@ public class App extends Application {
 
         task.setOnSucceeded(event -> {
             root.setDisable(false);
-            status.setText("Ready");
+            status.setText("");
 
             try {
                 onSuccess.accept(task.getValue());

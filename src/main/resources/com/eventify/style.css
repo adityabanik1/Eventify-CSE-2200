@@ -1,10 +1,12 @@
+@font-face { font-family: 'Orbitron'; src: url('fonts/Orbitron-Regular.ttf'); }
+@font-face { font-family: 'Orbitron'; font-weight: bold; src: url('fonts/Orbitron-Bold.ttf'); }
 /* ==========================================================================
    EVENTIFY — MODERN DARK THEME PALETTE (SaaS Dashboard Inspired)
    ========================================================================== */
 
 .root {
     -fx-font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
     -fx-background-color: #0b0f19;
     -fx-text-fill: #e2e8f0;
     -fx-accent: #6366f1;
@@ -17,13 +19,14 @@
 }
 
 .brand {
-    -fx-font-size: 26px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-text-fill: #6366f1;
-}
+
+    -fx-font-family: "Orbitron";}
 
 .subtitle {
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-text-fill: #94a3b8;
 }
 
@@ -54,16 +57,18 @@
 }
 
 .page-title {
-    -fx-font-size: 22px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: #f8fafc;
-}
+
+    -fx-font-family: "Orbitron";}
 
 .section-title {
-    -fx-font-size: 16px;
+    -fx-font-size: 19px;
     -fx-font-weight: bold;
     -fx-text-fill: #f1f5f9;
-}
+
+    -fx-font-family: "Orbitron";}
 
 .muted {
     -fx-text-fill: #94a3b8;
@@ -91,13 +96,13 @@
 }
 
 .hero-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
 
 .hero-subtitle {
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
     -fx-text-fill: #c7d2fe;
 }
 
@@ -118,17 +123,18 @@
 }
 
 .stat-title {
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #94a3b8;
     -fx-letter-spacing: 0.5px;
 }
 
 .stat-number {
-    -fx-font-size: 30px;
+    -fx-font-size: 35px;
     -fx-font-weight: bold;
     -fx-text-fill: #60a5fa;
-}
+
+    -fx-font-family: "Orbitron";}
 
 /* Sidebar Navigation */
 .sidebar {
@@ -141,20 +147,21 @@
 }
 
 .sidebar-brand {
-    -fx-font-size: 22px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: #818cf8;
     -fx-padding: 0 0 4px 8px;
-}
+
+    -fx-font-family: "Orbitron";}
 
 .sidebar-subtitle {
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
     -fx-text-fill: #64748b;
     -fx-padding: 0 0 16px 8px;
 }
 
 .sidebar-section-label {
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #475569;
     -fx-padding: 10px 8px 4px 8px;
@@ -164,7 +171,7 @@
 .nav-btn {
     -fx-background-color: transparent;
     -fx-text-fill: #94a3b8;
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
     -fx-font-weight: 500;
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 10px 14px;
@@ -211,7 +218,7 @@
     -fx-padding: 8px 15px;
     -fx-cursor: hand;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
 }
 
 .button:hover {
@@ -281,7 +288,7 @@
     -fx-background-radius: 8px;
     -fx-text-fill: #e2e8f0;
     -fx-font-family: 'Consolas', 'Courier New', monospace;
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
     -fx-line-spacing: 4px;
 }
 
@@ -350,7 +357,7 @@
     -fx-alignment: CENTER_LEFT;
     -fx-text-fill: #94a3b8;
     -fx-padding: 0 10px;
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
 }
 
 .table-row-cell {
@@ -388,7 +395,7 @@
     -fx-background-color: #0f172a;
     -fx-border-color: #1e293b transparent transparent transparent;
     -fx-text-fill: #64748b;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
 }
 
 .dialog-pane {
@@ -428,7 +435,7 @@
     -fx-background-radius: 999px;
     -fx-border-color: rgba(99, 102, 241, 0.35);
     -fx-border-radius: 999px;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
 }
 
 /* Role Card on Auth Screen */
@@ -480,7 +487,8 @@
 }
 .theme-bitfest .sidebar-brand {
     -fx-text-fill: #60a5fa;
-}
+
+    -fx-font-family: "Orbitron";}
 
 /* ========================================================
    FESTIVAL THEME 2: IGNITION 2026 (Fiery Orange & Molten Amber)
@@ -515,10 +523,12 @@
 }
 .theme-ignition .stat-number {
     -fx-text-fill: #fb923c;
-}
+
+    -fx-font-family: "Orbitron";}
 .theme-ignition .sidebar-brand {
     -fx-text-fill: #fb923c;
-}
+
+    -fx-font-family: "Orbitron";}
 .theme-ignition .table-row-cell:selected {
     -fx-background-color: rgba(234, 88, 12, 0.35);
 }
@@ -556,11 +566,15 @@
 }
 .theme-calibration .stat-number {
     -fx-text-fill: #34d399;
-}
+
+    -fx-font-family: "Orbitron";}
 .theme-calibration .sidebar-brand {
     -fx-text-fill: #34d399;
-}
+
+    -fx-font-family: "Orbitron";}
 .theme-calibration .table-row-cell:selected {
     -fx-background-color: rgba(16, 185, 129, 0.35);
 }
+
+
 

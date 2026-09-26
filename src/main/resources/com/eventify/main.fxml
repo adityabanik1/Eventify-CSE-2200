@@ -4,13 +4,15 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<ScrollPane fx:id="mainScroll"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.eventify.MainController"
-            fx:id="root"
-            prefWidth="1260"
-            prefHeight="820"
             stylesheets="@style.css">
+    <content>
+        <BorderPane fx:id="root"
+                    minWidth="1050" minHeight="650"
+                    prefWidth="1260" prefHeight="820">
 
     <!-- TOP HEADER -->
     <top>
@@ -342,3 +344,5 @@
     </bottom>
 
 </BorderPane>
+    </content>
+</ScrollPane>

@@ -106,7 +106,7 @@ public final class Forms {
                 100_000,
                 existing == null ? 100 : existing.capacity()
         );
-        capacity.setEditable(false);
+        capacity.setEditable(true);
 
         boolean accepted = show(
                 existing == null ? "Create event" : "Edit event",
@@ -220,7 +220,7 @@ public final class Forms {
                 1000,
                 existing == null ? 20 : existing.points()
         );
-        points.setEditable(false);
+        points.setEditable(true);
 
         boolean accepted = show(
                 existing == null ? "Assign task" : "Edit task",
@@ -304,14 +304,30 @@ public final class Forms {
         paymentOptions.setVisible(false);
         paymentOptions.setManaged(false);
 
-        Button bkashBtn = new Button("bKash");
-        bkashBtn.setStyle("-fx-background-color: #e2136e; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 15;");
+        Button bkashBtn = new Button();
+        try {
+            javafx.scene.image.ImageView bkashLogo = new javafx.scene.image.ImageView(new javafx.scene.image.Image(App.class.getResource("images/bkash.png").toExternalForm()));
+            bkashLogo.setFitHeight(30);
+            bkashLogo.setPreserveRatio(true);
+            bkashBtn.setGraphic(bkashLogo);
+        } catch (Exception ex) {
+            bkashBtn.setText("bKash");
+        }
+        bkashBtn.setStyle("-fx-background-color: white; -fx-cursor: hand; -fx-padding: 5 15; -fx-border-color: #e2136e; -fx-border-radius: 4; -fx-background-radius: 4;");
         
-        Button cardBtn = new Button("Card (Debit/Credit)");
-        cardBtn.setStyle("-fx-background-color: #1e293b; -fx-text-fill: white; -fx-border-color: #334155; -fx-cursor: hand; -fx-padding: 10 15;");
+        Button cardBtn = new Button();
+        try {
+            javafx.scene.image.ImageView cardLogo = new javafx.scene.image.ImageView(new javafx.scene.image.Image(App.class.getResource("images/card.png").toExternalForm()));
+            cardLogo.setFitHeight(30);
+            cardLogo.setPreserveRatio(true);
+            cardBtn.setGraphic(cardLogo);
+        } catch (Exception ex) {
+            cardBtn.setText("Card (Debit/Credit)");
+        }
+        cardBtn.setStyle("-fx-background-color: white; -fx-cursor: hand; -fx-padding: 5 15; -fx-border-color: #334155; -fx-border-radius: 4; -fx-background-radius: 4;");
 
         Button spotBtn = new Button("Spot Registration");
-        spotBtn.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 15;");
+        spotBtn.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 15; -fx-border-radius: 4; -fx-background-radius: 4;");
 
         paymentOptions.getChildren().addAll(bkashBtn, cardBtn, spotBtn);
 

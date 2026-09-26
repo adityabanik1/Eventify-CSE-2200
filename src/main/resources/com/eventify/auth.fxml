@@ -8,10 +8,9 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.eventify.AuthController"
             fitToWidth="true"
-            fitToHeight="true"
             stylesheets="@style.css">
 
-    <BorderPane fx:id="root" styleClass="auth-root" minHeight="580">
+    <BorderPane fx:id="root" styleClass="auth-root" minHeight="580" minWidth="650">
 
         <!-- Top Right Admin Login -->
         <top>
@@ -79,7 +78,7 @@
                     </TabPane>
                 </VBox>
 
-                <Label fx:id="statusLabel" text="Ready" wrapText="true" styleClass="muted"/>
+                <Label fx:id="statusLabel" text="" wrapText="true" styleClass="muted"/>
             </VBox>
         </center>
     </BorderPane>
