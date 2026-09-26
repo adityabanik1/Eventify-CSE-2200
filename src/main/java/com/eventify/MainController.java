@@ -24,6 +24,9 @@ public class MainController {
     private BorderPane root;
 
     @FXML
+    private javafx.scene.control.ScrollPane mainScroll;
+
+    @FXML
     private Label userLabel;
 
     @FXML
@@ -90,7 +93,7 @@ public class MainController {
     private Label taskHint;
 
     @FXML
-    private TextField countryField;
+    private ComboBox<String> countryBox;
 
     @FXML
     private TextField yearField;
@@ -163,6 +166,14 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        if (mainScroll != null && root != null) {
+            root.prefWidthProperty().bind(
+                javafx.beans.binding.Bindings.max(1050.0, mainScroll.widthProperty().subtract(15))
+            );
+            root.prefHeightProperty().bind(
+                javafx.beans.binding.Bindings.max(650.0, mainScroll.heightProperty().subtract(15))
+            );
+        }
         String activeEvent = App.getActiveMainEvent();
 
         // 1. Dynamic Festival Theming
@@ -556,10 +567,9 @@ public class MainController {
         );
 
         statusLabel.setText(
-                "Ready | "
-                        + (active == null
-                            ? "No event selected"
-                            : active.title())
+                active == null
+                        ? "No event selected"
+                        : active.title()
         );
     }
 
@@ -888,7 +898,7 @@ public class MainController {
 
     @FXML
     private void onFetchHolidays() {
-        String country = countryField.getText();
+        String country = countryBox.getValue();
         String year = yearField.getText();
 
         App.run(

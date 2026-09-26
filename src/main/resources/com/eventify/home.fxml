@@ -20,9 +20,16 @@
         <Label text="Select an Event to Continue" styleClass="page-title"/>
         <Label text="Choose your festival portal below to view challenges, schedules, and leadership." styleClass="muted"/>
 
+        <HBox alignment="CENTER" spacing="12" style="-fx-padding: 0 0 10 0;">
+            <TextField fx:id="searchField" promptText="Search for an upcoming festival..." 
+                       styleClass="search-bar"
+                       prefWidth="450"/>
+            <Button text="Search" styleClass="search-button" />
+        </HBox>
+
         <HBox spacing="20" alignment="CENTER" style="-fx-padding: 8px 0;">
             <!-- BitFest Card -->
-            <VBox spacing="12"
+            <VBox fx:id="bitfestCard" spacing="12"
                   alignment="CENTER"
                   styleClass="stat-card"
                   onMouseClicked="#onSelectBitFest"
@@ -44,7 +51,7 @@
             </VBox>
 
             <!-- Calibration Card -->
-            <VBox spacing="12"
+            <VBox fx:id="calibrationCard" spacing="12"
                   alignment="CENTER"
                   styleClass="stat-card"
                   onMouseClicked="#onSelectCalibration"
@@ -66,7 +73,7 @@
             </VBox>
 
             <!-- Ignition Card -->
-            <VBox spacing="12"
+            <VBox fx:id="ignitionCard" spacing="12"
                   alignment="CENTER"
                   styleClass="stat-card"
                   onMouseClicked="#onSelectIgnition"
@@ -88,6 +95,7 @@
             </VBox>
         </HBox>
 
-        <Label fx:id="statusLabel" text="Ready" wrapText="true" styleClass="muted"/>
+        <Label fx:id="statusLabel" text="" wrapText="true" styleClass="muted"/>
     </VBox>
 </StackPane>
+
