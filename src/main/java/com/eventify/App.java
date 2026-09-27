@@ -45,8 +45,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Regular.ttf"), 14);
-        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Bold.ttf"), 14);
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Regular.otf"), 14);
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Bold.otf"), 14);
         stage = primaryStage;
         stage.setTitle("Eventify");
 

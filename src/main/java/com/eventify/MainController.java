@@ -312,6 +312,14 @@ public class MainController {
         column(holidaysTable, "Local name", 320, Holiday::localName);
         column(holidaysTable, "English name", 360, Holiday::name);
         column(holidaysTable, "Country", 100, Holiday::countryCode);
+
+        if (countryBox != null) {
+            countryBox.getItems().setAll("BD", "US", "GB", "IN", "CA", "AU", "DE", "JP");
+            countryBox.setValue("BD");
+        }
+        if (yearField != null && (yearField.getText() == null || yearField.getText().isBlank())) {
+            yearField.setText(String.valueOf(LocalDate.now().getYear()));
+        }
     }
 
     private static <T> void indexColumn(TableView<T> table) {
@@ -364,6 +372,7 @@ public class MainController {
         visible(taskAdminBar, user.isAdmin());
         visible(attendanceButton, user.isAdmin());
         visible(registerButton, !user.isAdmin());
+        visible(navPlanning, user.isAdmin());
 
         registrationHint.setText(
                 user.isAdmin()

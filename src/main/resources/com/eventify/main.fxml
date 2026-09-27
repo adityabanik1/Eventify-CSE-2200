@@ -73,11 +73,11 @@
 
             <Label text="NAVIGATION" styleClass="sidebar-section-label"/>
 
-            <Button fx:id="navDashboard" text="🏠  Dashboard" onAction="#onNavDashboard" styleClass="nav-btn, active"/>
-            <Button fx:id="navEvents" text="🎯  Sub-Events" onAction="#onNavEvents" styleClass="nav-btn"/>
+            <Button fx:id="navDashboard" text="⚡  Dashboard" onAction="#onNavDashboard" styleClass="nav-btn, active"/>
+            <Button fx:id="navEvents" text="⚔  Competitions &amp; Events" onAction="#onNavEvents" styleClass="nav-btn"/>
             <Button fx:id="navRegistrations" text="👥  Registrations" onAction="#onNavRegistrations" styleClass="nav-btn"/>
-            <Button fx:id="navSchedule" text="⏱️  Schedule" onAction="#onNavSchedule" styleClass="nav-btn"/>
-            <Button fx:id="navTasks" text="📋  Team Tasks" onAction="#onNavTasks" styleClass="nav-btn"/>
+            <Button fx:id="navSchedule" text="⏱  Festival Timeline" onAction="#onNavSchedule" styleClass="nav-btn"/>
+            <Button fx:id="navTasks" text="🎯  Team Tasks" onAction="#onNavTasks" styleClass="nav-btn"/>
             <Button fx:id="navLeaderboard" text="🏆  Leaderboard" onAction="#onNavLeaderboard" styleClass="nav-btn"/>
             <Button fx:id="navPlanning" text="🌐  Planning &amp; JSON" onAction="#onNavPlanning" styleClass="nav-btn"/>
 
@@ -313,7 +313,7 @@
 
                                         <HBox spacing="10" alignment="CENTER_LEFT">
                                             <Label text="Country:"/>
-                                            <TextField fx:id="countryField" text="US" prefWidth="70"/>
+                                            <ComboBox fx:id="countryBox" editable="true" prefWidth="95"/>
 
                                             <Label text="Year:"/>
                                             <TextField fx:id="yearField" prefWidth="90"/>

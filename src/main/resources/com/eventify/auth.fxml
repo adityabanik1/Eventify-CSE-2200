@@ -30,12 +30,15 @@
         <center>
             <VBox alignment="CENTER" spacing="18" maxWidth="440">
                 <ImageView fx:id="eventLogoView" fitHeight="85" fitWidth="180" preserveRatio="true" smooth="true"/>
-                <HBox alignment="CENTER" spacing="12">
-                    <Label text="Eventify" styleClass="brand"/>
-                    <Label fx:id="eventBadge" text="BitFest" styleClass="event-badge"/>
-                </HBox>
-                <Label fx:id="subtitleLabel" text="Selected Event: BitFest" styleClass="subtitle"/>
-                <Button text="← Change Event" onAction="#onBackToHome" style="-fx-background-color: transparent; -fx-text-fill: #4f46e5; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                <!-- Main Festival Display Header -->
+                <VBox alignment="CENTER" spacing="5">
+                    <StackPane fx:id="titleStack" alignment="CENTER">
+                        <HBox fx:id="effectBox" alignment="CENTER" mouseTransparent="true"/>
+                        <Label fx:id="mainEventTitle" text="IGNITION" styleClass="auth-main-title"/>
+                    </StackPane>
+                    <Label fx:id="eventifySubLabel" text="EVENTIFY PLATFORM" styleClass="auth-sub-brand"/>
+                </VBox>
+                <Button text="← Change Event" onAction="#onBackToHome" styleClass="change-event-btn"/>
 
                 <!-- Participant Login / Signup -->
                 <VBox fx:id="participantBox" spacing="14" styleClass="form-panel" VBox.vgrow="ALWAYS" prefWidth="440">
