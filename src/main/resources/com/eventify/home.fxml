@@ -133,16 +133,9 @@
                     <Label text="Eventify AI" styleClass="page-title" style="-fx-font-size: 14px; -fx-text-fill: #f8fafc;"/>
                     <Label text="● Online" style="-fx-font-size: 10px; -fx-text-fill: #34d399; -fx-font-weight: bold;"/>
                 </HBox>
-                <Label text="Festival Co-pilot • 100% Free AI" styleClass="muted" style="-fx-font-size: 10px;"/>
+                <Label text="Festival Co-pilot" styleClass="muted" style="-fx-font-size: 10px;"/>
             </VBox>
             <Button text="✕" onAction="#onCloseChat" styleClass="ai-close-btn" style="-fx-padding: 3px 8px; -fx-font-size: 11px;"/>
-        </HBox>
-
-        <!-- Free AI Status Banner -->
-        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="ai-key-box" style="-fx-background-radius: 0; -fx-padding: 6px 14px;">
-            <Label text="✨ 100% Free AI Engine" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #38bdf8;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label text="No Key Required" style="-fx-font-size: 10px; -fx-text-fill: #34d399; -fx-font-weight: bold; -fx-background-color: rgba(16, 185, 129, 0.15); -fx-padding: 2px 8px; -fx-background-radius: 4px;"/>
         </HBox>
 
         <!-- Quick FAQs / Troubleshooting Chips -->

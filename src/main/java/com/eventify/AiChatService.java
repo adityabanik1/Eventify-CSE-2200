@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service to communicate with 100% Free Public AI (No API Key Required)
- * strictly scoped and guardrailed for the Eventify Festival & Event Platform.
+ * Service to communicate with the AI assistant strictly scoped
+ * and guardrailed for the Eventify Festival & Event Platform.
  */
 public final class AiChatService {
 
-    private static final String FREE_AI_ENDPOINT = "https://text.pollinations.ai/";
+    private static final String AI_ENDPOINT = "https://text.pollinations.ai/";
     private static final Gson GSON = new GsonBuilder().create();
 
     public record ChatMessage(String role, String text) {}
@@ -26,15 +26,12 @@ public final class AiChatService {
 
     private AiChatService() {}
 
-    /**
-     * Always returns true since this AI engine is 100% free with no API key needed!
-     */
     public static boolean hasApiKey() {
         return true;
     }
 
     public static String getApiKey() {
-        return "FREE_PUBLIC_AI_NO_KEY_NEEDED";
+        return "READY";
     }
 
     public static void setApiKey(String key) {
@@ -90,20 +87,20 @@ public final class AiChatService {
     }
 
     /**
-     * Sends user query to 100% Free AI API without any API keys.
-     * Falls back to offline smart intelligence if network is unavailable.
+     * Sends user query to AI service.
+     * Falls back to offline intelligence if network is unavailable.
      */
     public static String sendMessage(String userQuery, String activeFestival, String activeSubEvent, String userRole) {
         conversationHistory.add(new ChatMessage("user", userQuery));
 
         try {
-            String response = callFreeAi(activeFestival, activeSubEvent, userRole);
+            String response = callAiEndpoint(activeFestival, activeSubEvent, userRole);
             if (response != null && !response.isBlank()) {
                 conversationHistory.add(new ChatMessage("model", response));
                 return response;
             }
         } catch (Exception e) {
-            // Silently fallback to offline intelligence engine if network is unreachable
+            // Fallback to offline intelligence engine if network is unreachable
         }
 
         // Offline Fallback Engine
@@ -112,7 +109,7 @@ public final class AiChatService {
         return fallbackResponse;
     }
 
-    private static String callFreeAi(String activeFestival, String activeSubEvent, String userRole) throws Exception {
+    private static String callAiEndpoint(String activeFestival, String activeSubEvent, String userRole) throws Exception {
         JsonObject rootObj = new JsonObject();
         JsonArray messages = new JsonArray();
 
@@ -137,7 +134,7 @@ public final class AiChatService {
                 .connectTimeout(Duration.ofSeconds(8))
                 .build()) {
 
-            HttpRequest request = HttpRequest.newBuilder(URI.create(FREE_AI_ENDPOINT))
+            HttpRequest request = HttpRequest.newBuilder(URI.create(AI_ENDPOINT))
                     .timeout(Duration.ofSeconds(12))
                     .header("Content-Type", "application/json")
                     .header("Accept", "text/plain, application/json")

@@ -1039,7 +1039,7 @@ public class MainController {
                 "⚡ **Welcome to Eventify AI!**\n\n"
                         + "I am your intelligent assistant exclusively dedicated to the **Eventify** festival management platform.\n"
                         + "I can help you coordinate sub-events, check schedules, track participant registrations, explain team task workflows, and troubleshoot system issues.\n\n"
-                        + "✨ **100% Free & Keyless**: No API key or setup needed! Click any quick topic above or type your question below."
+                        + "Click any quick topic above or type your question below."
         );
     }
 
@@ -1083,15 +1083,15 @@ public class MainController {
 
     private void processFaq(String question, String faqKey) {
         appendUserMessage(question);
-        sendToFreeAi(question);
+        sendToAi(question);
     }
 
     private void processUserMessage(String userText) {
         appendUserMessage(userText);
-        sendToFreeAi(userText);
+        sendToAi(userText);
     }
 
-    private void sendToFreeAi(String message) {
+    private void sendToAi(String message) {
         if (chatStatusLabel != null) {
             chatStatusLabel.setText("🤖 Eventify AI is thinking...");
         }

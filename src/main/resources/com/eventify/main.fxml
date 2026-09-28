@@ -314,17 +314,10 @@
                                             <VBox spacing="4" HBox.hgrow="ALWAYS">
                                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                                     <Label text="🤖 EVENTIFY AI ASSISTANT" styleClass="page-title" style="-fx-font-size: 20px;"/>
-                                                    <Label text="100% FREE AI" styleClass="ai-model-badge"/>
                                                     <Label text="EVENTIFY ONLY" styleClass="ai-scope-badge"/>
                                                 </HBox>
                                                 <Label text="Intelligent assistant strictly scoped for Eventify operations, festival coordination, and troubleshooting." styleClass="muted"/>
                                             </VBox>
-
-                                            <!-- Free Engine Status Badge -->
-                                            <HBox spacing="8" alignment="CENTER_RIGHT" styleClass="ai-key-box">
-                                                <Label text="✨ Keyless AI Active" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #38bdf8;"/>
-                                                <Label text="No Key Needed" style="-fx-font-size: 11px; -fx-text-fill: #34d399; -fx-font-weight: bold; -fx-background-color: rgba(16, 185, 129, 0.15); -fx-padding: 3px 10px; -fx-background-radius: 4px;"/>
-                                            </HBox>
                                         </HBox>
 
                                         <!-- Quick Troubleshooting / FAQ Chips -->
