@@ -1,6 +1,8 @@
 package com.eventify;
 
-import com.google.gson.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,7 +20,7 @@ import java.util.List;
 public final class AiChatService {
 
     private static final String AI_ENDPOINT = "https://text.pollinations.ai/";
-    private static final Gson GSON = new GsonBuilder().create();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public record ChatMessage(String role, String text) {}
 
@@ -114,25 +116,25 @@ public final class AiChatService {
             .build();
 
     private static String callAiEndpoint(String activeFestival, String activeSubEvent, String userRole) throws Exception {
-        JsonObject rootObj = new JsonObject();
-        JsonArray messages = new JsonArray();
+        ObjectNode rootObj = MAPPER.createObjectNode();
+        ArrayNode messages = MAPPER.createArrayNode();
 
         // System Instruction
-        JsonObject sysMsg = new JsonObject();
-        sysMsg.addProperty("role", "system");
-        sysMsg.addProperty("content", buildSystemInstruction(activeFestival, activeSubEvent, userRole));
+        ObjectNode sysMsg = MAPPER.createObjectNode();
+        sysMsg.put("role", "system");
+        sysMsg.put("content", buildSystemInstruction(activeFestival, activeSubEvent, userRole));
         messages.add(sysMsg);
 
         // History
         for (ChatMessage msg : conversationHistory) {
-            JsonObject obj = new JsonObject();
-            obj.addProperty("role", "model".equals(msg.role()) ? "assistant" : "user");
-            obj.addProperty("content", msg.text());
+            ObjectNode obj = MAPPER.createObjectNode();
+            obj.put("role", "model".equals(msg.role()) ? "assistant" : "user");
+            obj.put("content", msg.text());
             messages.add(obj);
         }
 
-        rootObj.add("messages", messages);
-        String payload = GSON.toJson(rootObj);
+        rootObj.set("messages", messages);
+        String payload = MAPPER.writeValueAsString(rootObj);
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(AI_ENDPOINT))
                 .timeout(Duration.ofSeconds(12))

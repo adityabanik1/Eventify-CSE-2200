@@ -2,7 +2,10 @@ package com.eventify;
 
 import com.eventify.Models.Event;
 import com.eventify.Models.Holiday;
-import com.google.gson.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -22,9 +25,7 @@ public final class JsonService {
 
     private static final int MAX_JSON_CHARACTERS = 2_000_000;
 
-    private static final Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .create();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private JsonService() {
     }
@@ -113,9 +114,9 @@ public final class JsonService {
         }
 
         try {
-            JsonElement root = JsonParser.parseString(json);
+            JsonNode root = MAPPER.readTree(json);
 
-            if (!root.isJsonArray()) {
+            if (!root.isArray()) {
                 throw new IllegalArgumentException(
                         "Expected a JSON array of holidays."
                 );
@@ -123,19 +124,17 @@ public final class JsonService {
 
             List<Holiday> holidays = new ArrayList<>();
 
-            for (JsonElement element : root.getAsJsonArray()) {
-                JsonObject object = element.getAsJsonObject();
-
+            for (JsonNode element : root) {
                 LocalDate date = LocalDate.parse(
-                        requiredString(object, "date")
+                        requiredString(element, "date")
                 );
 
-                String name = requiredString(object, "name");
-                String country = requiredString(object, "countryCode");
+                String name = requiredString(element, "name");
+                String country = requiredString(element, "countryCode");
 
-                String localName = object.has("localName")
-                        && !object.get("localName").isJsonNull()
-                        ? object.get("localName").getAsString()
+                String localName = element.has("localName")
+                        && !element.get("localName").isNull()
+                        ? element.get("localName").asText()
                         : name;
 
                 holidays.add(new Holiday(
@@ -149,7 +148,7 @@ public final class JsonService {
             holidays.sort(Comparator.comparing(Holiday::date));
 
             return holidays;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Invalid holiday JSON. Each item needs date, name "
                             + "and countryCode; date must use yyyy-MM-dd.",
@@ -159,16 +158,16 @@ public final class JsonService {
     }
 
     private static String requiredString(
-            JsonObject object,
+            JsonNode object,
             String field
     ) {
-        if (!object.has(field) || object.get(field).isJsonNull()) {
+        if (!object.has(field) || object.get(field).isNull()) {
             throw new IllegalArgumentException(
                     "Missing JSON field: " + field
             );
         }
 
-        String result = object.get(field).getAsString();
+        String result = object.get(field).asText();
 
         if (result.isBlank()) {
             throw new IllegalArgumentException(
@@ -184,25 +183,25 @@ public final class JsonService {
             List<Event> events
     ) throws Exception {
 
-        JsonArray array = new JsonArray();
+        ArrayNode array = MAPPER.createArrayNode();
 
         for (Event event : events) {
-            JsonObject object = new JsonObject();
+            ObjectNode object = MAPPER.createObjectNode();
 
-            object.addProperty("id", event.id());
-            object.addProperty("title", event.title());
-            object.addProperty("description", event.description());
-            object.addProperty("venue", event.venue());
-            object.addProperty("date", event.date().toString());
-            object.addProperty("time", event.time());
-            object.addProperty("capacity", event.capacity());
+            object.put("id", event.id());
+            object.put("title", event.title());
+            object.put("description", event.description());
+            object.put("venue", event.venue());
+            object.put("date", event.date().toString());
+            object.put("time", event.time());
+            object.put("capacity", event.capacity());
 
             array.add(object);
         }
 
         Files.writeString(
                 file,
-                GSON.toJson(array),
+                MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(array),
                 StandardCharsets.UTF_8
         );
     }

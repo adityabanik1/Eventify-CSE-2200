@@ -2,7 +2,6 @@ package com.eventify;
 
 import com.eventify.Models.Event;
 import com.eventify.Models.Holiday;
-import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -99,22 +98,23 @@ class CoreTest {
 
         JsonService.exportEvents(file, List.of(event));
 
-        var array = JsonParser.parseString(
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        com.fasterxml.jackson.databind.JsonNode array = mapper.readTree(
                 Files.readString(file)
-        ).getAsJsonArray();
+        );
 
         assertEquals(1, array.size());
 
         assertEquals(
                 "Tech Fest",
-                array.get(0).getAsJsonObject()
-                        .get("title").getAsString()
+                array.get(0)
+                        .get("title").asText()
         );
 
         assertEquals(
                 "2026-08-20",
-                array.get(0).getAsJsonObject()
-                        .get("date").getAsString()
+                array.get(0)
+                        .get("date").asText()
         );
     }
 
