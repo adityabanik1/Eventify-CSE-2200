@@ -79,6 +79,7 @@
             <Button fx:id="navSchedule" text="⏱  Festival Timeline" onAction="#onNavSchedule" styleClass="nav-btn"/>
             <Button fx:id="navTasks" text="🎯  Team Tasks" onAction="#onNavTasks" styleClass="nav-btn"/>
             <Button fx:id="navLeaderboard" text="🏆  Leaderboard" onAction="#onNavLeaderboard" styleClass="nav-btn"/>
+            <Button fx:id="navAssistant" text="🤖  AI Assistant" onAction="#onNavAssistant" styleClass="nav-btn"/>
             <Button fx:id="navPlanning" text="🌐  Planning &amp; JSON" onAction="#onNavPlanning" styleClass="nav-btn"/>
 
             <Region VBox.vgrow="ALWAYS"/>
@@ -302,7 +303,66 @@
                         </content>
                     </Tab>
 
-                    <!-- TAB 6: PLANNING & JSON -->
+                    <!-- TAB 6: AI ASSISTANT -->
+                    <Tab text="AI Assistant">
+                        <content>
+                            <ScrollPane fitToWidth="true" fitToHeight="true">
+                                <content>
+                                    <VBox spacing="14" styleClass="page">
+                                        <!-- Header & Cyber Badge -->
+                                        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="ai-header-card">
+                                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                                    <Label text="🤖 EVENTIFY AI ASSISTANT" styleClass="page-title" style="-fx-font-size: 20px;"/>
+                                                    <Label text="100% FREE AI" styleClass="ai-model-badge"/>
+                                                    <Label text="EVENTIFY ONLY" styleClass="ai-scope-badge"/>
+                                                </HBox>
+                                                <Label text="Intelligent assistant strictly scoped for Eventify operations, festival coordination, and troubleshooting." styleClass="muted"/>
+                                            </VBox>
+
+                                            <!-- Free Engine Status Badge -->
+                                            <HBox spacing="8" alignment="CENTER_RIGHT" styleClass="ai-key-box">
+                                                <Label text="✨ Keyless AI Active" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #38bdf8;"/>
+                                                <Label text="No Key Needed" style="-fx-font-size: 11px; -fx-text-fill: #34d399; -fx-font-weight: bold; -fx-background-color: rgba(16, 185, 129, 0.15); -fx-padding: 3px 10px; -fx-background-radius: 4px;"/>
+                                            </HBox>
+                                        </HBox>
+
+                                        <!-- Quick Troubleshooting / FAQ Chips -->
+                                        <VBox spacing="8" styleClass="faq-container">
+                                            <Label text="⚡ COMMON TROUBLESHOOTING &amp; QUICK FAQS (CLICK TO ASK):" styleClass="faq-title"/>
+                                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                                <Button text="🔑 Problems with Login / Sign up?" onAction="#onFaqLogin" styleClass="faq-chip"/>
+                                                <Button text="➕ Issues creating/editing an Event?" onAction="#onFaqCreateEvent" styleClass="faq-chip"/>
+                                                <Button text="🏆 How does Leaderboard scoring work?" onAction="#onFaqLeaderboard" styleClass="faq-chip"/>
+                                                <Button text="⏱ Schedule overlap &amp; session rules" onAction="#onFaqSchedule" styleClass="faq-chip"/>
+                                            </HBox>
+                                        </VBox>
+
+                                        <!-- Chat Stream Container -->
+                                        <ScrollPane fx:id="chatScrollPane" fitToWidth="true" minHeight="360" VBox.vgrow="ALWAYS" styleClass="chat-scroll">
+                                            <content>
+                                                <VBox fx:id="chatMessagesBox" spacing="12" styleClass="chat-box"/>
+                                            </content>
+                                        </ScrollPane>
+
+                                        <!-- Chat Input Bar -->
+                                        <HBox spacing="10" alignment="CENTER">
+                                            <TextField fx:id="chatInputField"
+                                                       promptText="Ask Eventify AI about festival events, registrations, tasks, or troubleshooting..."
+                                                       HBox.hgrow="ALWAYS"
+                                                       onAction="#onSendChatMessage"
+                                                       styleClass="chat-input"/>
+                                            <Button fx:id="chatSendButton" text="⚡ Send" onAction="#onSendChatMessage" styleClass="primary"/>
+                                            <Button text="🗑 Clear" onAction="#onClearChat" styleClass="secondary-btn"/>
+                                        </HBox>
+                                        <Label fx:id="chatStatusLabel" text="Ready" styleClass="muted" style="-fx-font-size: 11px;"/>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </content>
+                    </Tab>
+
+                    <!-- TAB 7: PLANNING & JSON -->
                     <Tab text="Planning &amp; JSON">
                         <content>
                             <ScrollPane fitToWidth="true" fitToHeight="true">

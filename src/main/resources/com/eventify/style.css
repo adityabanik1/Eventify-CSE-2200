@@ -1,4 +1,4 @@
-﻿@font-face { font-family: 'Orbitron'; src: url('fonts/Orbitron-Regular.otf'); }
+@font-face { font-family: 'Orbitron'; src: url('fonts/Orbitron-Regular.otf'); }
 @font-face { font-family: 'Orbitron'; font-weight: bold; src: url('fonts/Orbitron-Bold.otf'); }
 /* ==========================================================================
    EVENTIFY — MODERN DARK THEME PALETTE (SaaS Dashboard Inspired)
@@ -744,4 +744,308 @@
     -fx-text-fill: #ffffff;
     -fx-border-color: #6366f1;
     -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.45), 10, 0, 0, 0);
+}
+
+/* ==========================================================================
+   EVENTIFY AI CHATBOT & FAQ STYLING (CYBERPUNK & NEO-TECH GLOW)
+   ========================================================================== */
+
+.ai-header-card {
+    -fx-background-color: linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.85), rgba(8, 51, 68, 0.8));
+    -fx-padding: 16px 20px;
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(6, 182, 212, 0.4);
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.2), 14, 0, 0, 2);
+}
+
+.ai-model-badge {
+    -fx-font-family: "Orbitron";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #38bdf8;
+    -fx-background-color: rgba(6, 182, 212, 0.15);
+    -fx-border-color: #06b6d4;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 3px 10px;
+}
+
+.ai-scope-badge {
+    -fx-font-family: "Orbitron";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34d399;
+    -fx-background-color: rgba(16, 185, 129, 0.15);
+    -fx-border-color: #10b981;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 3px 10px;
+}
+
+.ai-key-box {
+    -fx-background-color: rgba(15, 23, 42, 0.8);
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(99, 102, 241, 0.35);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+}
+
+.ai-key-input {
+    -fx-background-color: #090d16;
+    -fx-text-fill: #f8fafc;
+    -fx-border-color: #334155;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 5px 8px;
+    -fx-font-size: 12px;
+}
+
+.ai-key-input:focused {
+    -fx-border-color: #06b6d4;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.4), 8, 0, 0, 0);
+}
+
+.ai-save-btn {
+    -fx-background-color: linear-gradient(to right, #0284c7, #06b6d4);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 5px 12px;
+    -fx-cursor: hand;
+}
+
+.ai-save-btn:hover {
+    -fx-background-color: linear-gradient(to right, #0369a1, #0891b2);
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.5), 10, 0, 0, 0);
+}
+
+.ai-link-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #a5b4fc;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-underline: true;
+    -fx-padding: 4px 6px;
+}
+
+.ai-link-btn:hover {
+    -fx-text-fill: #ffffff;
+}
+
+/* Quick FAQ & Troubleshooting Chips */
+.faq-container {
+    -fx-background-color: rgba(17, 24, 39, 0.65);
+    -fx-padding: 12px 16px;
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(51, 65, 85, 0.8);
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+}
+
+.faq-title {
+    -fx-font-family: "Orbitron";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94a3b8;
+    -fx-letter-spacing: 1px;
+}
+
+.faq-chip {
+    -fx-background-color: rgba(30, 41, 59, 0.7);
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: rgba(99, 102, 241, 0.4);
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 6px 14px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-weight: 500;
+}
+
+.faq-chip:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.25);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #818cf8;
+    -fx-effect: dropshadow(gaussian, rgba(129, 140, 248, 0.5), 10, 0, 0, 0);
+}
+
+/* Chat Scroll & Conversation stream */
+.chat-scroll {
+    -fx-background-color: rgba(11, 15, 25, 0.75);
+    -fx-background-radius: 12px;
+    -fx-border-color: #1e293b;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+}
+
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.chat-box {
+    -fx-padding: 12px 14px;
+    -fx-background-color: transparent;
+}
+
+/* User Message Bubble */
+.user-bubble {
+    -fx-background-color: linear-gradient(to right, #4338ca, #3b82f6);
+    -fx-background-radius: 16px 16px 4px 16px;
+    -fx-padding: 12px 16px;
+    -fx-border-color: rgba(129, 140, 248, 0.4);
+    -fx-border-radius: 16px 16px 4px 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.25), 10, 0, 0, 2);
+}
+
+/* Bot Message Bubble */
+.bot-bubble {
+    -fx-background-color: rgba(15, 23, 42, 0.95);
+    -fx-background-radius: 16px 16px 16px 4px;
+    -fx-padding: 14px 18px;
+    -fx-border-color: rgba(6, 182, 212, 0.45);
+    -fx-border-radius: 16px 16px 16px 4px;
+    -fx-border-width: 1.2px;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.25), 14, 0, 0, 2);
+}
+
+/* Chat Input Bar */
+.chat-input {
+    -fx-background-color: #111827;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #334155;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 13.5px;
+}
+
+.chat-input:focused {
+    -fx-border-color: #06b6d4;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.45), 12, 0, 0, 0);
+}
+
+.secondary-btn {
+    -fx-background-color: rgba(30, 41, 59, 0.8);
+    -fx-text-fill: #94a3b8;
+    -fx-border-color: #334155;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 9px 18px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: rgba(51, 65, 85, 0.9);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #64748b;
+}
+
+/* Home Page AI Assistant Trigger & Drawer */
+.ai-home-action-btn {
+    -fx-background-color: linear-gradient(to right, #6366f1, #06b6d4);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #38bdf8;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 9px 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.45), 14, 0, 0, 2);
+}
+
+.ai-home-action-btn:hover {
+    -fx-background-color: linear-gradient(to right, #4f46e5, #0891b2);
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.7), 18, 0, 0, 2);
+}
+
+.ai-floating-btn {
+    -fx-background-color: linear-gradient(to right, #1e1b4b, #0f172a);
+    -fx-text-fill: #38bdf8;
+    -fx-font-family: "Orbitron";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-border-color: #06b6d4;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 10px 22px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.55), 16, 0, 0, 2);
+}
+
+.ai-floating-btn:hover {
+    -fx-background-color: linear-gradient(to right, #312e81, #1e293b);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #38bdf8;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.75), 20, 0, 0, 3);
+}
+
+.ai-home-drawer {
+    -fx-background-color: #0b0f19;
+    -fx-background-radius: 16px;
+    -fx-border-color: rgba(6, 182, 212, 0.6);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.4), 28, 0, 0, 6);
+}
+
+.ai-close-btn {
+    -fx-background-color: rgba(30, 41, 59, 0.6);
+    -fx-text-fill: #94a3b8;
+    -fx-border-color: #334155;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 4px 10px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.ai-close-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.3);
+    -fx-text-fill: #ef4444;
+    -fx-border-color: #ef4444;
+}
+
+/* Circular Floating Action Button (FAB) at Corner */
+.ai-corner-fab {
+    -fx-background-color: linear-gradient(to bottom right, #2563eb, #06b6d4);
+    -fx-min-width: 58px;
+    -fx-max-width: 58px;
+    -fx-min-height: 58px;
+    -fx-max-height: 58px;
+    -fx-background-radius: 999px;
+    -fx-border-radius: 999px;
+    -fx-border-color: #38bdf8;
+    -fx-border-width: 2px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.65), 18, 0, 0, 4);
+}
+
+.ai-corner-fab:hover {
+    -fx-background-color: linear-gradient(to bottom right, #1d4ed8, #0891b2);
+    -fx-border-color: #7dd3fc;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.9), 24, 0, 0, 6);
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+/* Messaging Portal (Corner Docked Chat Window) */
+.ai-chat-portal {
+    -fx-background-color: #0b0f19;
+    -fx-background-radius: 18px;
+    -fx-border-color: rgba(6, 182, 212, 0.6);
+    -fx-border-radius: 18px;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 28, 0, 0, 8);
 }

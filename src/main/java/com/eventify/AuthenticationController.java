@@ -24,7 +24,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuthController {
+public class AuthenticationController {
 
     @FXML
     private BorderPane root;

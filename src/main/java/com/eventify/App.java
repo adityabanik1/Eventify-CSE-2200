@@ -102,7 +102,7 @@ public class App extends Application {
 
             Parent root = loader.load();
 
-            switchScene(root, 900, 560, 680, 460, "Eventify — Select Event");
+            switchScene(root, 1020, 680, 800, 560, "Eventify — Select Event");
         } catch (IOException e) {
             showError(e);
         }
@@ -111,7 +111,7 @@ public class App extends Application {
     public static void showLogin() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    App.class.getResource("auth.fxml")
+                    App.class.getResource("authentication.fxml")
             );
 
             Parent root = loader.load();
@@ -185,6 +185,21 @@ public class App extends Application {
         });
 
         WORKER.submit(task);
+    }
+
+    public static <T> void runAsync(
+            Callable<T> work,
+            Consumer<T> onSuccess,
+            Consumer<Throwable> onError
+    ) {
+        WORKER.submit(() -> {
+            try {
+                T result = work.call();
+                javafx.application.Platform.runLater(() -> onSuccess.accept(result));
+            } catch (Throwable t) {
+                javafx.application.Platform.runLater(() -> onError.accept(t));
+            }
+        });
     }
 
     public static void showError(Throwable error) {
