@@ -27,10 +27,23 @@ public final class Models {
             LocalDate date,
             String time,
             int capacity
-    ) {
+    ) implements Exportable {
         @Override
         public String toString() {
             return title + " — " + date;
+        }
+
+        @Override
+        public com.fasterxml.jackson.databind.node.ObjectNode toJsonNode(com.fasterxml.jackson.databind.ObjectMapper mapper) {
+            com.fasterxml.jackson.databind.node.ObjectNode object = mapper.createObjectNode();
+            object.put("id", id());
+            object.put("title", title());
+            object.put("description", description());
+            object.put("venue", venue());
+            object.put("date", date().toString());
+            object.put("time", time());
+            object.put("capacity", capacity());
+            return object;
         }
     }
 

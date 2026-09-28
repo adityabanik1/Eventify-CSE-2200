@@ -185,18 +185,8 @@ public final class JsonService {
 
         ArrayNode array = MAPPER.createArrayNode();
 
-        for (Event event : events) {
-            ObjectNode object = MAPPER.createObjectNode();
-
-            object.put("id", event.id());
-            object.put("title", event.title());
-            object.put("description", event.description());
-            object.put("venue", event.venue());
-            object.put("date", event.date().toString());
-            object.put("time", event.time());
-            object.put("capacity", event.capacity());
-
-            array.add(object);
+        for (Exportable exportable : events) {
+            array.add(exportable.toJsonNode(MAPPER));
         }
 
         Files.writeString(

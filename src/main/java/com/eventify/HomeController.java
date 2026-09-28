@@ -5,7 +5,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
-public class HomeController {
+public class HomeController extends BaseController {
+
+    @Override
+    public void setupController() {
+        // Implementation of BaseController's abstract method
+        if (apiKeyField != null) {
+            apiKeyField.setText(AiChatService.getApiKey());
+        }
+        initChat();
+    }
 
     @FXML
     private VBox root;
@@ -95,10 +104,7 @@ public class HomeController {
             });
         }
 
-        if (apiKeyField != null) {
-            apiKeyField.setText(AiChatService.getApiKey());
-        }
-        initChat();
+        setupController();
     }
 
     @FXML
