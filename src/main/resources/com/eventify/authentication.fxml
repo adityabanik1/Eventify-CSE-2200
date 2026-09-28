@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eventify.AuthenticationController"
+            fitToWidth="true"
+            stylesheets="@style.css">
+
+    <BorderPane fx:id="root" styleClass="auth-root" minHeight="580" minWidth="650">
+
+        <!-- Top Right Admin Login -->
+        <top>
+            <HBox alignment="TOP_RIGHT" spacing="10">
+                <VBox spacing="8" alignment="TOP_RIGHT" styleClass="form-panel" style="-fx-padding: 12px; -fx-background-radius: 8px;">
+                    <Label text="Admin Sign In" styleClass="section-title" style="-fx-font-size: 13px; -fx-text-fill: #94a3b8;"/>
+                    <HBox spacing="8">
+                        <TextField fx:id="adminEmail" text="admin@eventify.com" promptText="Admin Email" prefWidth="140" style="-fx-font-size: 11px;"/>
+                        <PasswordField fx:id="adminPassword" text="Admin@12345" promptText="Password" prefWidth="120" style="-fx-font-size: 11px;" onAction="#onAdminLogin"/>
+                        <Button text="Go" onAction="#onAdminLogin" styleClass="primary" style="-fx-font-size: 11px; -fx-padding: 4px 10px;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </top>
+
+        <!-- Center Area -->
+        <center>
+            <VBox alignment="CENTER" spacing="18" maxWidth="440">
+                <ImageView fx:id="eventLogoView" fitHeight="85" fitWidth="180" preserveRatio="true" smooth="true"/>
+                <!-- Main Festival Display Header -->
+                <VBox alignment="CENTER" spacing="5">
+                    <StackPane fx:id="titleStack" alignment="CENTER">
+                        <HBox fx:id="effectBox" alignment="CENTER" mouseTransparent="true"/>
+                        <Label fx:id="mainEventTitle" text="IGNITION" styleClass="auth-main-title"/>
+                    </StackPane>
+                    <Label fx:id="eventifySubLabel" text="EVENTIFY PLATFORM" styleClass="auth-sub-brand"/>
+                </VBox>
+                <Button text="← Change Event" onAction="#onBackToHome" styleClass="change-event-btn"/>
+
+                <!-- Participant Login / Signup -->
+                <VBox fx:id="participantBox" spacing="14" styleClass="form-panel" VBox.vgrow="ALWAYS" prefWidth="440">
+                    <Label text="Participant Portal" styleClass="section-title"/>
+                    <TabPane fx:id="participantTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                        <tabs>
+                            <!-- Participant Login Tab -->
+                            <Tab text="Participant Sign In">
+                                <content>
+                                    <VBox spacing="12" style="-fx-padding: 16px 0 0 0;">
+                                        <Label text="Email address"/>
+                                        <TextField fx:id="participantLoginEmail" promptText="e.g. alice@example.com"/>
+
+                                        <Label text="Password"/>
+                                        <PasswordField fx:id="participantLoginPassword" promptText="Your password" onAction="#onParticipantLogin"/>
+
+                                        <Button text="Sign In as Participant" onAction="#onParticipantLogin" maxWidth="Infinity" styleClass="primary"/>
+
+                                        <Label text="Demo participants: alice@example.com, bob@example.com (Password: Password@123)" wrapText="true" style="-fx-font-size: 11px;" styleClass="muted"/>
+                                    </VBox>
+                                </content>
+                            </Tab>
+
+                            <!-- Participant Sign Up Tab -->
+                            <Tab fx:id="signUpTab" text="Participant Sign Up">
+                                <content>
+                                    <VBox spacing="10" style="-fx-padding: 16px 0 0 0;">
+                                        <TextField fx:id="registerName" promptText="Full name"/>
+                                        <TextField fx:id="registerEmail" promptText="Email address"/>
+                                        <PasswordField fx:id="registerPassword" promptText="Password: at least 8 characters"/>
+                                        <PasswordField fx:id="confirmPassword" promptText="Confirm password" onAction="#onRegister"/>
+
+                                        <Button text="Create Participant Account" onAction="#onRegister" maxWidth="Infinity" styleClass="primary"/>
+
+                                        <Label text="New accounts can browse, register, and complete tasks." wrapText="true" styleClass="muted"/>
+                                    </VBox>
+                                </content>
+                            </Tab>
+                        </tabs>
+                    </TabPane>
+                </VBox>
+
+                <Label fx:id="statusLabel" text="" wrapText="true" styleClass="muted"/>
+            </VBox>
+        </center>
+    </BorderPane>
+</ScrollPane>

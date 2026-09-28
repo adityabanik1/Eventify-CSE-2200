@@ -23,7 +23,7 @@ public class App extends Application {
     private static Stage stage;
 
     private static final ExecutorService WORKER =
-            Executors.newSingleThreadExecutor(runnable -> {
+            Executors.newFixedThreadPool(4, runnable -> {
                 Thread thread = new Thread(
                         runnable,
                         "eventify-background-worker"
@@ -32,20 +32,32 @@ public class App extends Application {
                 return thread;
             });
 
+    private static String activeMainEvent = null;
+
+    public static void setActiveMainEvent(String eventName) {
+        activeMainEvent = eventName;
+        Database.setDatabaseContext(eventName);
+    }
+
+    public static String getActiveMainEvent() {
+        return activeMainEvent;
+    }
+
     @Override
     public void start(Stage primaryStage) {
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Regular.otf"), 14);
+        javafx.scene.text.Font.loadFont(App.class.getResourceAsStream("fonts/Orbitron-Bold.otf"), 14);
         stage = primaryStage;
         stage.setTitle("Eventify");
 
-        Label loading = new Label("Preparing Eventify...");
-        StackPane root = new StackPane(loading);
+        showHome();
+    }
 
-        stage.setScene(new Scene(root, 520, 420));
-        stage.show();
-
+    public static void selectMainEventAndLogin(String eventName, Parent currentRoot, Label statusLabel) {
+        setActiveMainEvent(eventName);
         run(
-                root,
-                loading,
+                currentRoot,
+                statusLabel,
                 () -> {
                     Database.initialize();
                     return null;
@@ -54,19 +66,58 @@ public class App extends Application {
         );
     }
 
-    public static void showLogin() {
+    private static void switchScene(
+            Parent root,
+            double defaultWidth,
+            double defaultHeight,
+            double minWidth,
+            double minHeight,
+            String title
+    ) {
+        stage.setTitle(title);
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
+
+        Scene currentScene = stage.getScene();
+        if (currentScene == null) {
+            stage.setScene(new Scene(root, defaultWidth, defaultHeight));
+            stage.centerOnScreen();
+            stage.show();
+        } else {
+            boolean wasMaximized = stage.isMaximized();
+            currentScene.setRoot(root);
+            if (!wasMaximized) {
+                stage.setWidth(defaultWidth);
+                stage.setHeight(defaultHeight);
+                stage.centerOnScreen();
+            }
+        }
+    }
+
+    public static void showHome() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    App.class.getResource("auth.fxml")
+                    App.class.getResource("home.fxml")
             );
 
             Parent root = loader.load();
 
-            stage.setMinWidth(480);
-            stage.setMinHeight(570);
-            stage.setTitle("Eventify — Sign in");
-            stage.setScene(new Scene(root, 520, 600));
-            stage.centerOnScreen();
+            switchScene(root, 1020, 680, 800, 560, "Eventify — Select Event");
+        } catch (IOException e) {
+            showError(e);
+        }
+    }
+
+    public static void showLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    App.class.getResource("authentication.fxml")
+            );
+
+            Parent root = loader.load();
+
+            String event = activeMainEvent != null ? activeMainEvent : "General";
+            switchScene(root, 680, 680, 480, 420, "Eventify (" + event + ") — Portal Access");
         } catch (IOException e) {
             showError(e);
         }
@@ -82,11 +133,8 @@ public class App extends Application {
 
             MainController controller = loader.getController();
 
-            stage.setMinWidth(1000);
-            stage.setMinHeight(680);
-            stage.setTitle("Eventify — " + user.name());
-            stage.setScene(new Scene(root, 1200, 780));
-            stage.centerOnScreen();
+            String event = activeMainEvent != null ? activeMainEvent : "General";
+            switchScene(root, 1180, 750, 720, 480, "Eventify (" + event + ") — " + user.name());
 
             controller.setUser(user);
         } catch (IOException e) {
@@ -116,7 +164,7 @@ public class App extends Application {
 
         task.setOnSucceeded(event -> {
             root.setDisable(false);
-            status.setText("Ready");
+            status.setText("");
 
             try {
                 onSuccess.accept(task.getValue());
@@ -137,6 +185,21 @@ public class App extends Application {
         });
 
         WORKER.submit(task);
+    }
+
+    public static <T> void runAsync(
+            Callable<T> work,
+            Consumer<T> onSuccess,
+            Consumer<Throwable> onError
+    ) {
+        WORKER.submit(() -> {
+            try {
+                T result = work.call();
+                javafx.application.Platform.runLater(() -> onSuccess.accept(result));
+            } catch (Throwable t) {
+                javafx.application.Platform.runLater(() -> onError.accept(t));
+            }
+        });
     }
 
     public static void showError(Throwable error) {

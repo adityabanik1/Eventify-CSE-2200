@@ -106,7 +106,7 @@ public final class Forms {
                 100_000,
                 existing == null ? 100 : existing.capacity()
         );
-        capacity.setEditable(false);
+        capacity.setEditable(true);
 
         boolean accepted = show(
                 existing == null ? "Create event" : "Edit event",
@@ -220,7 +220,7 @@ public final class Forms {
                 1000,
                 existing == null ? 20 : existing.points()
         );
-        points.setEditable(false);
+        points.setEditable(true);
 
         boolean accepted = show(
                 existing == null ? "Assign task" : "Edit task",
@@ -248,6 +248,117 @@ public final class Forms {
                 due.getValue(),
                 points.getValue()
         );
+    }
+
+    public static boolean showPaymentForm(Event event) {
+        Dialog<Boolean> dialog = new Dialog<>();
+        dialog.initOwner(App.window());
+        dialog.setTitle("Event Registration");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+
+        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(15);
+        content.setStyle("-fx-padding: 24; -fx-pref-width: 440;");
+
+        javafx.scene.layout.HBox headerBox = new javafx.scene.layout.HBox(10);
+        headerBox.setAlignment(javafx.geometry.Pos.CENTER);
+        
+        String activeEvent = App.getActiveMainEvent();
+        String logoFile = "images/bitfest.png";
+        if (activeEvent != null) {
+            switch (activeEvent.toLowerCase()) {
+                case "calibration" -> logoFile = "images/calibration.png";
+                case "ignition" -> logoFile = "images/ignition.png";
+                default -> logoFile = "images/bitfest.png";
+            }
+        }
+        
+        java.net.URL url = App.class.getResource(logoFile);
+        if (url != null) {
+            javafx.scene.image.ImageView logo = new javafx.scene.image.ImageView(new javafx.scene.image.Image(url.toExternalForm()));
+            logo.setFitHeight(50);
+            logo.setPreserveRatio(true);
+            headerBox.getChildren().add(logo);
+        }
+
+        javafx.scene.layout.VBox titleBox = new javafx.scene.layout.VBox(4);
+        Label titleLabel = new Label("Secure Registration");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        Label subtitle = new Label(event.title());
+        titleBox.getChildren().addAll(titleLabel, subtitle);
+        headerBox.getChildren().add(titleBox);
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Participant Full Name");
+        TextField teamField = new TextField();
+        teamField.setPromptText("Team Name (Optional)");
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Phone Number");
+
+        Button payNowBtn = new Button("Pay Now 💳");
+        payNowBtn.setStyle("-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10 20; -fx-cursor: hand;");
+        payNowBtn.setMaxWidth(Double.MAX_VALUE);
+
+        javafx.scene.layout.HBox paymentOptions = new javafx.scene.layout.HBox(12);
+        paymentOptions.setAlignment(javafx.geometry.Pos.CENTER);
+        paymentOptions.setVisible(false);
+        paymentOptions.setManaged(false);
+
+        Button bkashBtn = new Button();
+        try {
+            javafx.scene.image.ImageView bkashLogo = new javafx.scene.image.ImageView(new javafx.scene.image.Image(App.class.getResource("images/bkash.png").toExternalForm()));
+            bkashLogo.setFitHeight(30);
+            bkashLogo.setPreserveRatio(true);
+            bkashBtn.setGraphic(bkashLogo);
+        } catch (Exception ex) {
+            bkashBtn.setText("bKash");
+        }
+        bkashBtn.setStyle("-fx-background-color: white; -fx-cursor: hand; -fx-padding: 5 15; -fx-border-color: #e2136e; -fx-border-radius: 4; -fx-background-radius: 4;");
+        
+        Button cardBtn = new Button();
+        try {
+            javafx.scene.image.ImageView cardLogo = new javafx.scene.image.ImageView(new javafx.scene.image.Image(App.class.getResource("images/card.png").toExternalForm()));
+            cardLogo.setFitHeight(30);
+            cardLogo.setPreserveRatio(true);
+            cardBtn.setGraphic(cardLogo);
+        } catch (Exception ex) {
+            cardBtn.setText("Card (Debit/Credit)");
+        }
+        cardBtn.setStyle("-fx-background-color: white; -fx-cursor: hand; -fx-padding: 5 15; -fx-border-color: #334155; -fx-border-radius: 4; -fx-background-radius: 4;");
+
+        Button spotBtn = new Button("Spot Registration");
+        spotBtn.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 15; -fx-border-radius: 4; -fx-background-radius: 4;");
+
+        paymentOptions.getChildren().addAll(bkashBtn, cardBtn, spotBtn);
+
+        payNowBtn.setOnAction(e -> {
+            if (nameField.getText().isBlank() || phoneField.getText().isBlank()) {
+                Forms.info("Name and Phone Number are required.");
+                return;
+            }
+            payNowBtn.setVisible(false);
+            payNowBtn.setManaged(false);
+            paymentOptions.setVisible(true);
+            paymentOptions.setManaged(true);
+        });
+
+        bkashBtn.setOnAction(e -> { dialog.setResult(true); dialog.close(); });
+        cardBtn.setOnAction(e -> { dialog.setResult(true); dialog.close(); });
+        spotBtn.setOnAction(e -> { dialog.setResult(true); dialog.close(); });
+
+        content.getChildren().addAll(
+                headerBox,
+                new javafx.scene.layout.Region(),
+                new Label("Participant Details:"), nameField, teamField, phoneField,
+                new javafx.scene.layout.Region(),
+                payNowBtn,
+                paymentOptions
+        );
+
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getStylesheets().add(Forms.class.getResource("style.css").toExternalForm());
+
+        return dialog.showAndWait().orElse(false);
     }
 
     public static boolean confirm(String message) {

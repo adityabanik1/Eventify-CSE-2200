@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.eventify.HomeController"
+           stylesheets="@style.css"
+           style="-fx-background-color: #0b0f19;">
+
+    <VBox fx:id="root"
+          alignment="CENTER"
+          spacing="24"
+          maxWidth="920"
+          styleClass="auth-root">
+
+        <Label text="Eventify" styleClass="brand"/>
+        <Label text="Select an Event to Continue" styleClass="page-title"/>
+        <Label text="Choose your festival portal below to view challenges, schedules, and leadership." styleClass="muted"/>
+
+        <HBox alignment="CENTER" spacing="12" style="-fx-padding: 0 0 10 0;">
+            <TextField fx:id="searchField" promptText="Search for an upcoming festival..." 
+                       styleClass="search-bar"
+                       prefWidth="380"/>
+            <Button text="Search" styleClass="search-button" />
+            <Button fx:id="homeAiButton" text="🤖 Ask Eventify AI" onAction="#onToggleChat" styleClass="ai-home-action-btn"/>
+        </HBox>
+
+        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 8px 0;">
+            <!-- BitFest Card -->
+            <VBox fx:id="bitfestCard" spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectBitFest"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(37, 99, 235, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(59, 130, 246, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/bitfest.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="BitFest 2025" styleClass="section-title"/>
+                <Label text="3rd KUET CSE National Tech Festival" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- Calibration Card -->
+            <VBox fx:id="calibrationCard" spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectCalibration"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(16, 185, 129, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(16, 185, 129, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/calibration.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="Calibration 2.0" styleClass="section-title"/>
+                <Label text="KUET Mechatronics National Tech Fest" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- Ignition Card -->
+            <VBox fx:id="ignitionCard" spacing="12"
+                  alignment="CENTER"
+                  styleClass="stat-card"
+                  onMouseClicked="#onSelectIgnition"
+                  style="-fx-cursor: hand; -fx-min-width: 220px; -fx-max-width: 260px;">
+                <StackPane prefHeight="120" prefWidth="120" alignment="CENTER"
+                           style="-fx-background-color: rgba(234, 88, 12, 0.15); -fx-background-radius: 12px; -fx-padding: 8px; -fx-border-color: rgba(234, 88, 12, 0.35); -fx-border-radius: 12px;">
+                    <ImageView fitHeight="105" fitWidth="105" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@images/ignition.png"
+                                   requestedWidth="120"
+                                   requestedHeight="120"
+                                   preserveRatio="true"
+                                   smooth="true"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <Label text="Ignition 2026" styleClass="section-title"/>
+                <Label text="KUET Mechanical National Engineering Fest" styleClass="muted" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+        </HBox>
+
+        <Label fx:id="statusLabel" text="" wrapText="true" styleClass="muted"/>
+    </VBox>
+
+    <!-- FLOATING CORNER CIRCULAR AI ACTION BUTTON -->
+    <HBox alignment="BOTTOM_RIGHT" mouseTransparent="false" pickOnBounds="false" style="-fx-padding: 22px;">
+        <Button fx:id="floatingAiBtn" onAction="#onToggleChat" styleClass="ai-corner-fab">
+            <graphic>
+                <StackPane alignment="CENTER">
+                    <Label fx:id="fabIcon" text="🤖" style="-fx-font-size: 26px;"/>
+                </StackPane>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Eventify AI Messaging Portal"/>
+            </tooltip>
+        </Button>
+    </HBox>
+
+    <!-- MESSAGING PORTAL POPUP (DOCKED IN BOTTOM-RIGHT CORNER) -->
+    <VBox fx:id="chatOverlay" visible="false" managed="false" alignment="TOP_CENTER"
+          prefWidth="390" maxWidth="410" prefHeight="530" maxHeight="560"
+          styleClass="ai-chat-portal"
+          StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin>
+            <Insets bottom="88" right="22"/>
+        </StackPane.margin>
+        
+        <!-- Portal Header -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="ai-header-card" style="-fx-background-radius: 16px 16px 0 0; -fx-padding: 12px 16px;">
+            <StackPane style="-fx-background-color: rgba(6, 182, 212, 0.2); -fx-background-radius: 999px; -fx-padding: 6px; -fx-border-color: #06b6d4; -fx-border-radius: 999px;">
+                <Label text="🤖" style="-fx-font-size: 16px;"/>
+            </StackPane>
+            <VBox HBox.hgrow="ALWAYS" spacing="1">
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Label text="Eventify AI" styleClass="page-title" style="-fx-font-size: 14px; -fx-text-fill: #f8fafc;"/>
+                    <Label text="● Online" style="-fx-font-size: 10px; -fx-text-fill: #34d399; -fx-font-weight: bold;"/>
+                </HBox>
+                <Label text="Festival Co-pilot" styleClass="muted" style="-fx-font-size: 10px;"/>
+            </VBox>
+            <Button text="✕" onAction="#onCloseChat" styleClass="ai-close-btn" style="-fx-padding: 3px 8px; -fx-font-size: 11px;"/>
+        </HBox>
+
+        <!-- Quick FAQs / Troubleshooting Chips -->
+        <VBox spacing="5" styleClass="faq-container" style="-fx-background-radius: 0; -fx-padding: 8px 12px;">
+            <Label text="⚡ COMMON QUESTIONS (CLICK TO ASK):" styleClass="faq-title" style="-fx-font-size: 9.5px;"/>
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <Button text="🔑 Login Help" onAction="#onFaqLogin" styleClass="faq-chip" style="-fx-font-size: 10.5px; -fx-padding: 4px 8px;"/>
+                <Button text="➕ Create Event" onAction="#onFaqCreateEvent" styleClass="faq-chip" style="-fx-font-size: 10.5px; -fx-padding: 4px 8px;"/>
+                <Button text="🏆 Leaderboard" onAction="#onFaqLeaderboard" styleClass="faq-chip" style="-fx-font-size: 10.5px; -fx-padding: 4px 8px;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Chat Stream -->
+        <ScrollPane fx:id="chatScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="chat-scroll" style="-fx-background-radius: 0; -fx-min-height: 250px;">
+            <content>
+                <VBox fx:id="chatMessagesBox" spacing="8" styleClass="chat-box" style="-fx-padding: 10px;"/>
+            </content>
+        </ScrollPane>
+
+        <!-- Input Bar -->
+        <HBox spacing="6" alignment="CENTER" style="-fx-padding: 8px 12px; -fx-background-color: #0f172a; -fx-background-radius: 0 0 16px 16px;">
+            <TextField fx:id="chatInputField"
+                       promptText="Ask Eventify AI about festivals, login, rules..."
+                       HBox.hgrow="ALWAYS"
+                       onAction="#onSendChatMessage"
+                       styleClass="chat-input" style="-fx-font-size: 12px; -fx-padding: 7px 10px;"/>
+            <Button fx:id="chatSendButton" text="➤" onAction="#onSendChatMessage" styleClass="primary" style="-fx-font-size: 13px; -fx-padding: 6px 12px; -fx-font-weight: bold;"/>
+            <Button text="🗑" onAction="#onClearChat" styleClass="secondary-btn" style="-fx-font-size: 11px; -fx-padding: 6px 8px;"/>
+        </HBox>
+        <Label fx:id="chatStatusLabel" text="Ready" styleClass="muted" style="-fx-font-size: 9.5px; -fx-padding: 2px 12px 4px 12px;"/>
+    </VBox>
+</StackPane>
+

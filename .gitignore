@@ -39,5 +39,10 @@ build/
 .DS_Store
 
 # AI and temporary notes
+.agents/
 .agentsrules/
-PREVIOUS_CHAT.md
+PREVIOUS_CHAT*
+prev_context*
+prev_text*
+agent_rules*
+agentrules*

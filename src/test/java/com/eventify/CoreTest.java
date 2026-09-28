@@ -117,4 +117,43 @@ class CoreTest {
                         .get("date").getAsString()
         );
     }
+
+    @Test
+    void aiChatSystemInstructionContainsEventifyGuardrails() {
+        String prompt = AiChatService.buildSystemInstruction("BitFest", "IUPC", "Participant");
+
+        assertTrue(prompt.contains("Eventify AI"));
+        assertTrue(prompt.contains("BitFest"));
+        assertTrue(prompt.contains("IUPC"));
+        assertTrue(prompt.contains("STRICT GUARDRAILS & SCOPE"));
+        assertTrue(prompt.contains("I am Eventify AI, an exclusive assistant for the Eventify Festival Management platform"));
+    }
+
+    @Test
+    void aiChatQuickFaqAnswersProvideAccurateGuidance() {
+        String loginFaq = AiChatService.getQuickFaqAnswer("LOGIN");
+        assertTrue(loginFaq.contains("admin@eventify.com"));
+        assertTrue(loginFaq.contains("alice@example.com"));
+
+        String leaderboardFaq = AiChatService.getQuickFaqAnswer("LEADERBOARD");
+        assertTrue(leaderboardFaq.contains("10 points"));
+        assertTrue(leaderboardFaq.contains("Dense ranking"));
+
+        String eventFaq = AiChatService.getQuickFaqAnswer("EVENT_CREATION");
+        assertTrue(eventFaq.contains("Organizer"));
+        assertTrue(eventFaq.contains("YYYY-MM-DD"));
+    }
+
+    @Test
+    void aiChatHistoryManagement() {
+        AiChatService.clearHistory();
+        assertEquals(0, AiChatService.getHistory().size());
+    }
+
+    @Test
+    void aiChatFreeOperationRequiresNoApiKey() {
+        assertTrue(AiChatService.hasApiKey());
+        assertNotNull(AiChatService.getApiKey());
+    }
 }
+
