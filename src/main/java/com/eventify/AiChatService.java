@@ -109,6 +109,10 @@ public final class AiChatService {
         return fallbackResponse;
     }
 
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(8))
+            .build();
+
     private static String callAiEndpoint(String activeFestival, String activeSubEvent, String userRole) throws Exception {
         JsonObject rootObj = new JsonObject();
         JsonArray messages = new JsonArray();
@@ -130,22 +134,17 @@ public final class AiChatService {
         rootObj.add("messages", messages);
         String payload = GSON.toJson(rootObj);
 
-        try (HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(8))
-                .build()) {
+        HttpRequest request = HttpRequest.newBuilder(URI.create(AI_ENDPOINT))
+                .timeout(Duration.ofSeconds(12))
+                .header("Content-Type", "application/json")
+                .header("Accept", "text/plain, application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(payload, StandardCharsets.UTF_8))
+                .build();
 
-            HttpRequest request = HttpRequest.newBuilder(URI.create(AI_ENDPOINT))
-                    .timeout(Duration.ofSeconds(12))
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "text/plain, application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(payload, StandardCharsets.UTF_8))
-                    .build();
+        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-
-            if (response.statusCode() == 200 && response.body() != null && !response.body().isBlank()) {
-                return response.body().trim();
-            }
+        if (response.statusCode() == 200 && response.body() != null && !response.body().isBlank()) {
+            return response.body().trim();
         }
         return null;
     }
